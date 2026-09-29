@@ -1,0 +1,1227 @@
+dding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                                    <option value="">${翻译值.apiEnabledDefault}</option>
+                                    <option value="yes">${翻译值.apiEnabledYes}</option>
+                            </select>
+                                <small style="color: #ffb400; font-size: 0.85rem;">${翻译值.apiEnabledHint}</small>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.regionMatching}</label>
+                            <select id="regionMatching" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                                    <option value="">${翻译值.regionMatchingDefault}</option>
+                                    <option value="no">${翻译值.regionMatchingNo}</option>
+                            </select>
+                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.regionMatchingHint}</small>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.downgradeControl}</label>
+                            <select id="downgradeControl" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                                    <option value="">${翻译值.downgradeControlDefault}</option>
+                                    <option value="no">${翻译值.downgradeControlNo}</option>
+                                    <option value="only">${翻译值.downgradeControlOnly}</option>
+                            </select>
+                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.downgradeControlHint}</small>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.tlsControl}</label>
+                            <select id="portControl" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                                    <option value="">${翻译值.tlsControlDefault}</option>
+                                    <option value="yes">${翻译值.tlsControlYes}</option>
+                            </select>
+                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.tlsControlHint}</small>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.preferredControl}</label>
+                            <select id="preferredControl" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                                    <option value="">${翻译值.preferredControlDefault}</option>
+                                    <option value="yes">${翻译值.preferredControlYes}</option>
+                            </select>
+                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.preferredControlHint}</small>
+                        </div>
+                    </form>
+                    <div id="currentConfig" style="background: rgba(0, 0, 0, 0.9); border: 1px solid #00f0ff; padding: 15px; margin: 10px 0; font-family: 'Courier New', monospace; color: #00f0ff;">
+                            ${翻译值.loading}
+                    </div>
+                    <div id="pathTypeInfo" style="background: rgba(15, 3, 40, 0.7); border: 1px solid #00f0ff; padding: 15px; margin: 10px 0; font-family: 'Courier New', monospace; color: #00f0ff;">
+                            <div style="font-weight: bold; margin-bottom: 8px; color: #00ff9d; text-shadow: 0 0 5px #00ff9d;">${翻译值.currentConfig}</div>
+                            <div id="pathTypeStatus">${翻译值.checking}</div>
+                    </div>
+                </div>
+                <div id="statusMessage" style="display: none; padding: 10px; margin: 10px 0; border: 1px solid #00f0ff; background: rgba(8, 4, 28, 0.8); color: #00f0ff; text-shadow: 0 0 5px #00f0ff;"></div>
+            </div>
+            
+            <div class="card">
+                    <h2 class="card-title">${翻译值.relatedLinks}</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://github.com/byJoey/cfnew" target="_blank" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">${翻译值.githubProject}</a>
+                        <a href="https://github.com/byJoey/yx-tools/releases/" target="_blank" rel="noopener noreferrer" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">${翻译值.优选工具}</a>
+                    <a href="https://www.youtube.com/@joeyblog" target="_blank" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">YouTube @joeyblog</a>
+                </div>
+            </div>
+        </div>
+        <div id="cpToastStack" class="cp-toast-stack" aria-live="polite" aria-atomic="false"></div>
+        <div id="cpActionStatus" class="cp-action-status" role="status" aria-live="polite"></div>
+        <div id="cpActionBar" class="cp-action-bar" role="toolbar" aria-label="${翻译值.configManagement}">
+            <button type="button" id="cpBtnSaveAll" class="cp-fab-save" title="${是否值236 ? 'ذخیره همه تنظیمات' : '保存所有配置 (Ctrl+S)'}">
+                <span class="cp-fab-icon">▣</span>
+                <span>${是否值236 ? 'ذخیره همه' : '保 存 全 部'}</span>
+                <span class="cp-fab-dot" aria-hidden="true"></span>
+            </button>
+            <button type="button" id="cpBtnRefresh" class="cp-action-btn" data-tip="${翻译值.refreshConfig}" aria-label="${翻译值.refreshConfig}">
+                <span aria-hidden="true">↻</span>
+                <span class="cp-btn-label">${翻译值.refreshConfig}</span>
+            </button>
+            <button type="button" id="cpBtnReset" class="cp-action-btn cp-action-btn-danger" data-tip="${翻译值.resetConfig}" aria-label="${翻译值.resetConfig}">
+                <span aria-hidden="true">⌫</span>
+                <span class="cp-btn-label">${翻译值.resetConfig}</span>
+            </button>
+        </div>
+        <script>
+// 地址从服务器配置注入
+var 订阅转换网址 = "${订阅转换接口}";
+// 远程配置URL（硬编码）
+var 远程配置网址 = "${远程配置网址}";
+
+// 翻译对象
+const 本地值20215 = {
+  zh: {
+    subscriptionCopied: '${解码64('6K6i6ZiF6ZO+5o6l5bey5aSN5Yi2')}',
+    autoSubscriptionCopied: '${解码64('6Ieq5Yqo6K+G5Yir6K6i6ZiF6ZO+5o6l5bey5aSN5Yi277yM5a6i5oi356uv6K6/6Zeu5pe25Lya5qC55o2uVXNlci1BZ2VudOiHquWKqOivhuWIq+W5tui/lOWbnuWvueW6lOagvOW8jw==')}'
+  },
+  fa: {
+    subscriptionCopied: 'لینک اشتراک کپی شد',
+    autoSubscriptionCopied: 'لینک اشتراک تشخیص خودکار کپی شد، کلاینت هنگام دسترسی بر اساس User-Agent به طور خودکار تشخیص داده و قالب مربوطه را برمی‌گرداند'
+  }
+};
+function 获取凭据20214(名称20213) {
+  const 值20212 = '; ' + document.cookie;
+  const 部分列表20211 = 值20212.split('; ' + 名称20213 + '=');
+  if (部分列表20211.length === 2) return 部分列表20211.pop().split(';').shift();
+  return null;
+}
+const 浏览器语言20210 = navigator.language || navigator.userLanguage || '';
+const 已保存语言20209 = localStorage.getItem('preferredLanguage') || 获取凭据20214('preferredLanguage');
+let 是否值20208 = false;
+if (已保存语言20209 === 'fa' || 已保存语言20209 === 'fa-IR') {
+  是否值20208 = true;
+} else if (已保存语言20209 === 'zh' || 已保存语言20209 === 'zh-CN') {
+  是否值20208 = false;
+} else {
+  是否值20208 = 浏览器语言20210.includes('fa') || 浏览器语言20210.includes('fa-IR');
+}
+const 翻译值20207 = 本地值20215[是否值20208 ? 'fa' : 'zh'];
+function 切换语言(语言) {
+  localStorage.setItem('preferredLanguage', 语言);
+  // 设置Cookie（有效期1年）
+  const 过期日期20206 = new Date();
+  过期日期20206.setFullYear(过期日期20206.getFullYear() + 1);
+  document.cookie = 'preferredLanguage=' + 语言 + '; path=/; expires=' + 过期日期20206.toUTCString() + '; SameSite=Lax';
+  // 刷新页面，不使用URL参数
+  window.location.reload();
+}
+
+// 页面加载时检查 localStorage 和 Cookie，并清理URL参数
+window.addEventListener('DOMContentLoaded', function () {
+  const 已保存语言20205 = localStorage.getItem('preferredLanguage') || 获取凭据20214('preferredLanguage');
+  const 网址参数 = new URLSearchParams(window.location.search);
+  const 网址语言 = 网址参数.get('lang');
+
+  // 如果URL中有语言参数，移除它并设置Cookie
+  if (网址语言) {
+    const 当前网址20204 = new URL(window.location.href);
+    当前网址20204.searchParams.delete('lang');
+    const 新网址 = 当前网址20204.toString();
+
+    // 设置Cookie
+    const 过期日期20203 = new Date();
+    过期日期20203.setFullYear(过期日期20203.getFullYear() + 1);
+    document.cookie = 'preferredLanguage=' + 网址语言 + '; path=/; expires=' + 过期日期20203.toUTCString() + '; SameSite=Lax';
+    localStorage.setItem('preferredLanguage', 网址语言);
+
+    // 使用history API移除URL参数，不刷新页面
+    window.history.replaceState({}, '', 新网址);
+  } else if (已保存语言20205) {
+    // 如果localStorage中有但Cookie中没有，同步到Cookie
+    const 过期日期 = new Date();
+    过期日期.setFullYear(过期日期.getFullYear() + 1);
+    document.cookie = 'preferredLanguage=' + 已保存语言20205 + '; path=/; expires=' + 过期日期.toUTCString() + '; SameSite=Lax';
+  }
+});
+
+// 赛博朋克风 toast 通知 (替代 alert)
+window.显示提示 = function (消息20202, 类型20201, 本地值20200) {
+  本地值20200 = 本地值20200 || {};
+  var 堆栈 = document.getElementById('cpToastStack');
+  if (!堆栈) return;
+  var 类型映射 = {
+    success: '✓',
+    info: '⌬',
+    warn: '⚠',
+    error: '✕'
+  };
+  var 标题映射 = {
+    success: 'SUCCESS',
+    info: 'INFO',
+    warn: 'WARN',
+    error: 'ERROR'
+  };
+  类型20201 = 类型映射[类型20201] ? 类型20201 : 'success';
+  var 持续时间 = 本地值20200.duration || 3200;
+  var 提示 = document.createElement('div');
+  提示.className = 'cp-toast cp-toast-' + 类型20201;
+  提示.style.setProperty('--cp-toast-dur', 持续时间 + 'ms');
+  var 图标 = document.createElement('span');
+  图标.className = 'cp-toast-icon';
+  图标.textContent = 类型映射[类型20201];
+  var 主体 = document.createElement('div');
+  主体.className = 'cp-toast-body';
+  var 标题 = document.createElement('div');
+  标题.className = 'cp-toast-title';
+  标题.textContent = 本地值20200.title || 标题映射[类型20201];
+  var 消息20199 = document.createElement('div');
+  消息20199.className = 'cp-toast-msg';
+  消息20199.textContent = String(消息20202 == null ? '' : 消息20202);
+  主体.appendChild(标题);
+  主体.appendChild(消息20199);
+  var 关闭 = document.createElement('button');
+  关闭.type = 'button';
+  关闭.className = 'cp-toast-close';
+  关闭.setAttribute('aria-label', 'close');
+  关闭.textContent = '✕';
+  提示.appendChild(图标);
+  提示.appendChild(主体);
+  提示.appendChild(关闭);
+  堆栈.appendChild(提示);
+  requestAnimationFrame(function () {
+    提示.classList.add('cp-show');
+  });
+  var 本地值20198 = false;
+  function 关闭提示() {
+    if (本地值20198) return;
+    本地值20198 = true;
+    提示.classList.remove('cp-show');
+    提示.classList.add('cp-hide');
+    setTimeout(function () {
+      if (提示.parentNode) 提示.parentNode.removeChild(提示);
+    }, 400);
+  }
+  关闭.addEventListener('click', 关闭提示);
+  var 计时器 = setTimeout(关闭提示, 持续时间);
+  提示.addEventListener('mouseenter', function () {
+    clearTimeout(计时器);
+  });
+  提示.addEventListener('mouseleave', function () {
+    计时器 = setTimeout(关闭提示, 1200);
+  });
+  return {
+    dismiss: 关闭提示,
+    element: 提示
+  };
+};
+function 尝试打开应用(方案网址20197, 回退回调, 超时20196) {
+  超时20196 = 超时20196 || 2500;
+  var 应用已打开 = false;
+  var 回调已执行 = false;
+  var 开始值 = Date.now();
+  var 值值20195 = function () {
+    var 耗时20194 = Date.now() - 开始值;
+    if (耗时20194 < 3000 && !回调已执行) {
+      应用已打开 = true;
+    }
+  };
+  window.addEventListener('blur', 值值20195);
+  var 值值20193 = function () {
+    var 耗时 = Date.now() - 开始值;
+    if (耗时 < 3000 && !回调已执行) {
+      应用已打开 = true;
+    }
+  };
+  document.addEventListener('visibilitychange', 值值20193);
+  var 内嵌框架 = document.createElement('iframe');
+  内嵌框架.style.display = 'none';
+  内嵌框架.style.width = '1px';
+  内嵌框架.style.height = '1px';
+  内嵌框架.src = 方案网址20197;
+  document.body.appendChild(内嵌框架);
+  setTimeout(function () {
+    内嵌框架.parentNode && 内嵌框架.parentNode.removeChild(内嵌框架);
+    window.removeEventListener('blur', 值值20195);
+    document.removeEventListener('visibilitychange', 值值20193);
+    if (!回调已执行) {
+      回调已执行 = true;
+      if (!应用已打开 && 回退回调) {
+        回退回调();
+      }
+    }
+  }, 超时20196);
+}
+function 生成客户端链接(客户端类型, 客户端名称) {
+  var 当前网址20192 = window.location.href;
+  var 订阅网址20191 = 当前网址20192 + "/sub";
+  var 方案网址 = '';
+  var 显示名称 = 客户端名称 || '';
+  var 最终网址 = 订阅网址20191;
+  if (客户端类型 === atob('djJyYXk=')) {
+    最终网址 = 订阅网址20191;
+    var 网址值20190 = document.getElementById("clientSubscriptionUrl");
+    网址值20190.textContent = 最终网址;
+    网址值20190.style.display = "block";
+    网址值20190.style.overflowWrap = "break-word";
+    网址值20190.style.wordBreak = "break-all";
+    网址值20190.style.overflowX = "auto";
+    网址值20190.style.maxWidth = "100%";
+    网址值20190.style.boxSizing = "border-box";
+    if (客户端名称 === 'V2RAY') {
+      navigator.clipboard.writeText(最终网址).then(function () {
+        显示提示(显示名称 + " " + 翻译值20207.subscriptionCopied, 'success');
+      });
+    } else if (客户端名称 === 'Shadowrocket') {
+      方案网址 = '${解码64('c2hhZG93cm9ja2V0Oi8vYWRkLw==')}' + encodeURIComponent(最终网址);
+      尝试打开应用(方案网址, function () {
+        navigator.clipboard.writeText(最终网址).then(function () {
+          显示提示(显示名称 + " " + 翻译值20207.subscriptionCopied, 'success');
+        });
+      });
+    } else if (客户端名称 === 'V2RAYNG') {
+      方案网址 = '${解码64('djJyYXluZzovL2luc3RhbGw/dXJsPQ==')}' + encodeURIComponent(最终网址);
+      尝试打开应用(方案网址, function () {
+        navigator.clipboard.writeText(最终网址).then(function () {
+          显示提示(显示名称 + " " + 翻译值20207.subscriptionCopied, 'success');
+        });
+      });
+    } else if (客户端名称 === 'NEKORAY') {
+      方案网址 = '${解码64('bmVrb3JheTovL2luc3RhbGwtY29uZmlnP3VybD0=')}' + encodeURIComponent(最终网址);
+      尝试打开应用(方案网址, function () {
+        navigator.clipboard.writeText(最终网址).then(function () {
+          显示提示(显示名称 + " " + 翻译值20207.subscriptionCopied, 'success');
+        });
+      });
+    }
+  } else {
+    // 统一走内部格式转换
+    最终网址 = 订阅网址20191 + (订阅网址20191.includes('?') ? '&' : '?') + "target=" + 客户端类型;
+    var 网址值20190 = document.getElementById("clientSubscriptionUrl");
+    网址值20190.textContent = 最终网址;
+    网址值20190.style.display = "block";
+    网址值20190.style.overflowWrap = "break-word";
+    网址值20190.style.wordBreak = "break-all";
+    网址值20190.style.overflowX = "auto";
+    网址值20190.style.maxWidth = "100%";
+    网址值20190.style.boxSizing = "border-box";
+    if (客户端类型 === 'vg') {
+      方案网址 = '${解码64('Y2xhc2g6Ly9pbnN0YWxsLWNvbmZpZz91cmw9')}' + encodeURIComponent(最终网址);
+    } else if (客户端类型 === atob('Y2xhc2g=')) {
+      if (客户端名称 === 'STASH') {
+        方案网址 = '${解码64('c3Rhc2g6Ly9pbnN0YWxsP3VybD0=')}' + encodeURIComponent(最终网址);
+        显示名称 = 'STASH';
+      } else {
+        方案网址 = '${解码64('Y2xhc2g6Ly9pbnN0YWxsLWNvbmZpZz91cmw9')}' + encodeURIComponent(最终网址);
+        显示名称 = 'CLASH';
+      }
+    } else if (客户端类型 === atob('c3VyZ2U=')) {
+      方案网址 = '${解码64('c3VyZ2U6Ly8vaW5zdGFsbC1jb25maWc/dXJsPQ==')}' + encodeURIComponent(最终网址);
+      显示名称 = 'SURGE';
+    } else if (客户端类型 === atob('c2luZ2JveA==')) {
+      方案网址 = '${解码64('c2luZy1ib3g6Ly9pbnN0YWxsLWNvbmZpZz91cmw9')}' + encodeURIComponent(最终网址);
+      显示名称 = 'SING-BOX';
+    } else if (客户端类型 === atob('bG9vbg==')) {
+      方案网址 = '${解码64('bG9vbjovL2luc3RhbGw/dXJsPQ==')}' + encodeURIComponent(最终网址);
+      显示名称 = 'LOON';
+    } else if (客户端类型 === atob('cXVhbng=')) {
+      方案网址 = '${解码64('cXVhbnR1bXVsdC14Oi8vaW5zdGFsbC1jb25maWc/dXJsPQ==')}' + encodeURIComponent(最终网址);
+      显示名称 = 'QUANTUMULT X';
+    }
+    if (方案网址) {
+      尝试打开应用(方案网址, function () {
+        navigator.clipboard.writeText(最终网址).then(function () {
+          显示提示(显示名称 + " " + 翻译值20207.subscriptionCopied, 'success');
+        });
+      });
+    } else {
+      navigator.clipboard.writeText(最终网址).then(function () {
+        显示提示(显示名称 + " " + 翻译值20207.subscriptionCopied, 'success');
+      });
+    }
+  }
+}
+
+// 页面特效图形化开关 (localStorage 持久化)
+window.应用页面特效 = function () {
+  var 本地值20189 = localStorage.getItem('cp-fx-off') === '1';
+  document.body.classList.toggle('fx-off', 本地值20189);
+  var 本地值20188 = document.getElementById('cpFxLabel');
+  if (本地值20188) 本地值20188.textContent = 本地值20189 ? 'FX: OFF' : 'FX: ON';
+  if (本地值20189) {
+    var 本地值20187 = document.getElementById('matrixCodeRain');
+    if (本地值20187) 本地值20187.innerHTML = '';
+  } else if (typeof 创建矩阵雨 === 'function') {
+    var 结果值 = document.getElementById('matrixCodeRain');
+    if (结果值 && !结果值.firstChild) 创建矩阵雨();
+  }
+};
+window.切换页面特效 = function () {
+  var 本地值20186 = localStorage.getItem('cp-fx-off') === '1';
+  localStorage.setItem('cp-fx-off', 本地值20186 ? '0' : '1');
+  window.应用页面特效();
+};
+(function () {
+  if (localStorage.getItem('cp-fx-off') === '1') {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.body.classList.add('fx-off');
+      var 本地值20185 = document.getElementById('cpFxLabel');
+      if (本地值20185) 本地值20185.textContent = 'FX: OFF';
+    });
+  }
+})();
+function 创建矩阵雨() {
+  if (document.body && document.body.classList.contains('fx-off')) return;
+  const 矩阵值 = document.getElementById('matrixCodeRain');
+  if (!矩阵值) return;
+  const 赛博字符列表 = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ$%#@!?<>+=ABCDEF';
+  const 调色板 = ['#00f0ff', '#ff2bd6', '#a347ff', '#00ff9d'];
+  const 列数 = Math.floor(window.innerWidth / 20);
+  for (let 索引值20184 = 0; 索引值20184 < 列数; 索引值20184++) {
+    const 列20183 = document.createElement('div');
+    列20183.className = 'matrix-column';
+    列20183.style.left = 索引值20184 * 20 + 'px';
+    列20183.style.animationDelay = -Math.random() * 15 + 's';
+    列20183.style.animationDuration = Math.random() * 14 + 8 + 's';
+    列20183.style.fontSize = Math.random() * 4 + 12 + 'px';
+    列20183.style.opacity = (Math.random() * 0.7 + 0.3).toFixed(2);
+    let 文本20182 = '';
+    const 字符数量 = Math.floor(Math.random() * 30 + 18);
+    for (let 次索引值 = 0; 次索引值 < 字符数量; 次索引值++) {
+      const 字符 = 赛博字符列表[Math.floor(Math.random() * 赛博字符列表.length)];
+      const 值强调 = Math.random() > 0.85;
+      const 颜色 = 值强调 ? 调色板[Math.floor(Math.random() * 调色板.length)] : '';
+      文本20182 += 颜色 ? '<span style="color:' + 颜色 + ';text-shadow:0 0 8px ' + 颜色 + ';">' + 字符 + '</span><br>' : '<span>' + 字符 + '</span><br>';
+    }
+    列20183.innerHTML = 文本20182;
+    矩阵值.appendChild(列20183);
+  }
+  setInterval(function () {
+    const 列列表 = 矩阵值.querySelectorAll('.matrix-column');
+    列列表.forEach(function (列) {
+      if (Math.random() > 0.94) {
+        const 字符列表 = 列.querySelectorAll('span');
+        if (字符列表.length > 0) {
+          const 目标20181 = 字符列表[Math.floor(Math.random() * 字符列表.length)];
+          const 本地值20180 = 目标20181.style.color;
+          目标20181.style.color = '#ffffff';
+          目标20181.style.textShadow = '0 0 10px #ffffff, 0 0 18px #00f0ff';
+          setTimeout(function () {
+            目标20181.style.color = 本地值20180;
+            目标20181.style.textShadow = '';
+          }, 200);
+        }
+      }
+    });
+  }, 110);
+}
+async function 检查系统状态() {
+  try {
+    const 云墙状态 = document.getElementById('cfStatus');
+    const 地区状态 = document.getElementById('regionStatus');
+    const 值值20179 = document.getElementById('geoInfo');
+    const 备用状态 = document.getElementById('backupStatus');
+    const 当前地址 = document.getElementById('currentIP');
+    const 地区值 = document.getElementById('regionMatch');
+
+    // 获取当前语言设置（优先从Cookie/localStorage读取）
+    function 获取凭据20178(名称20177) {
+      const 值20176 = '; ' + document.cookie;
+      const 部分列表20175 = 值20176.split('; ' + 名称20177 + '=');
+      if (部分列表20175.length === 2) return 部分列表20175.pop().split(';').shift();
+      return null;
+    }
+    const 浏览器语言20174 = navigator.language || navigator.userLanguage || '';
+    const 已保存语言20173 = localStorage.getItem('preferredLanguage') || 获取凭据20178('preferredLanguage');
+    let 是否值20172 = false;
+    if (已保存语言20173 === 'fa' || 已保存语言20173 === 'fa-IR') {
+      是否值20172 = true;
+    } else if (已保存语言20173 === 'zh' || 已保存语言20173 === 'zh-CN') {
+      是否值20172 = false;
+    } else {
+      是否值20172 = 浏览器语言20174.includes('fa') || 浏览器语言20174.includes('fa-IR');
+    }
+    const 本地值20171 = {
+      zh: {
+        workerRegion: 'Worker地区: ',
+        detectionMethod: '检测方式: ',
+        proxyIPStatus: '${解码64('UHJveHlJUOeKtuaAgTog')}',
+        currentIP: '当前使用IP: ',
+        regionMatch: '地区匹配: ',
+        regionNames: {
+          'CF': '${解码64('8J+MkCDlrpjmlrnnm7Tov54=')}',
+          'HK': '🇭🇰 香港',
+          'US': '🇺🇸 美国',
+          'SG': '🇸🇬 新加坡',
+          'JP': '🇯🇵 日本',
+          'KR': '🇰🇷 韩国',
+          'DE': '🇩🇪 德国',
+          'SE': '🇸🇪 瑞典',
+          'NL': '🇳🇱 荷兰',
+          'FI': '🇫🇮 芬兰',
+          'GB': '🇬🇧 英国'
+        },
+        customIPMode: '${解码64('6Ieq5a6a5LmJUHJveHlJUOaooeW8jyAocOWPmOmHj+WQr+eUqCk=')}',
+        customIPModeDesc: '自定义IP模式 (已禁用地区匹配)',
+        usingCustomProxyIP: '${解码64('5L2/55So6Ieq5a6a5LmJUHJveHlJUDog')}',
+        customIPConfig: ' (p变量配置)',
+        customIPModeDisabled: '自定义IP模式，地区选择已禁用',
+        manualRegion: '手动指定地区',
+        manualRegionDesc: ' (手动指定)',
+        proxyIPAvailable: '${解码64('MTAvMTAg5Y+v55SoIChQcm94eUlQ5Z+f5ZCN6aKE6K6+5Y+v55SoKQ==')}',
+        smartSelection: '智能就近选择中',
+        sameRegionIP: '同地区IP可用 (1个)',
+        cloudflareDetection: '${解码64('5a6Y5pa555u06L+e')}',
+        detectionFailed: '检测失败',
+        unknown: '未知'
+      },
+      fa: {
+        workerRegion: 'منطقه Worker: ',
+        detectionMethod: 'روش تشخیص: ',
+        proxyIPStatus: '${解码64('2YjYtti524zYqiBQcm94eUlQOiA=')}',
+        currentIP: 'IP فعلی: ',
+        regionMatch: 'تطبیق منطقه: ',
+        regionNames: {
+          'CF': '🌐 مستقیم رسمی',
+          'HK': '🇭🇰 هنگ کنگ',
+          'US': '🇺🇸 آمریکا',
+          'SG': '🇸🇬 سنگاپور',
+          'JP': '🇯🇵 ژاپن',
+          'KR': '🇰🇷 کره جنوبی',
+          'DE': '🇩🇪 آلمان',
+          'SE': '🇸🇪 سوئد',
+          'NL': '🇳🇱 هلند',
+          'FI': '🇫🇮 فنلاند',
+          'GB': '🇬🇧 بریتانیا'
+        },
+        customIPMode: '${解码64('2K3Yp9mE2KogUHJveHlJUCDYs9mB2KfYsdi024wgKNmF2KrYutuM2LEgcCDZgdi52KfZhCDYp9iz2Kop')}',
+        customIPModeDesc: 'حالت IP سفارشی (تطبیق منطقه غیرفعال است)',
+        usingCustomProxyIP: '${解码64('2KfYs9iq2YHYp9iv2Ycg2KfYsiBQcm94eUlQINiz2YHYp9ix2LTbjDog')}',
+        customIPConfig: ' (پیکربندی متغیر p)',
+        customIPModeDisabled: 'حالت IP سفارشی، انتخاب منطقه غیرفعال است',
+        manualRegion: 'تعیین منطقه دستی',
+        manualRegionDesc: ' (تعیین دستی)',
+        proxyIPAvailable: '${解码64('MTAvMTAg2K/YsSDYr9iz2KrYsdizICjYr9in2YXZhtmHINm+24zYtOKAjNmB2LHYtiBQcm94eUlQINiv2LEg2K/Ys9iq2LHYsyDYp9iz2Kop')}',
+        smartSelection: 'انتخاب هوشمند نزدیک در حال انجام است',
+        sameRegionIP: 'IP هم‌منطقه در دسترس است (1)',
+        cloudflareDetection: 'اتصال مستقیم رسمی',
+        detectionFailed: 'تشخیص ناموفق',
+        unknown: 'ناشناخته'
+      }
+    };
+    const 翻译值20170 = 本地值20171[是否值20172 ? 'fa' : 'zh'];
+    let 值地区20169 = 'US'; // 默认值
+    let 是否自定义地址值 = false;
+    let 是否手动地区值 = false;
+    try {
+      const 响应20168 = await fetch(window.location.pathname + '/region');
+      const 数据20167 = await 响应20168.json();
+      if (数据20167.region === 'CUSTOM') {
+        是否自定义地址值 = true;
+        值地区20169 = 'CUSTOM';
+
+        // 获取自定义IP的详细信息
+        const 自定义地址值 = 数据20167.ci || 翻译值20170.unknown;
+        值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #ffb400;">⚙️ ' + 翻译值20170.customIPMode + '</span>';
+        地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #ffb400;">🔧 ' + 翻译值20170.customIPModeDesc + '</span>';
+
+        // 显示自定义IP配置状态，包含具体IP
+        if (备用状态) 备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #ffb400;">🔧 ' + 翻译值20170.usingCustomProxyIP + 自定义地址值 + '</span>';
+        if (当前地址) 当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #ffb400;">✅ ' + 自定义地址值 + 翻译值20170.customIPConfig + '</span>';
+        if (地区值) 地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #ffb400;">⚠️ ' + 翻译值20170.customIPModeDisabled + '</span>';
+        return; // 提前返回，不执行后续的地区匹配逻辑
+      } else if (数据20167.detectionMethod === '手动指定地区' || 数据20167.detectionMethod === 'تعیین منطقه دستی') {
+        是否手动地区值 = true;
+        值地区20169 = 数据20167.region;
+        值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #00b380;">' + 翻译值20170.manualRegion + '</span>';
+        地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #00ff9d;">🎯 ' + 翻译值20170.regionNames[值地区20169] + 翻译值20170.manualRegionDesc + '</span>';
+
+        // 显示配置状态而不是检测状态
+        if (备用状态) 备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
+        if (当前地址) 当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.smartSelection + '</span>';
+        if (地区值) 地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
+        return; // 提前返回，不执行后续的地区匹配逻辑
+      } else if (数据20167.region && 翻译值20170.regionNames[数据20167.region]) {
+        值地区20169 = 数据20167.region;
+      }
+      值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #00ff9d;">' + 翻译值20170.cloudflareDetection + '</span>';
+    } catch (事件值20166) {
+      值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #ff3860;">' + 翻译值20170.detectionFailed + '</span>';
+    }
+    地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.regionNames[值地区20169] + '</span>';
+
+    // 直接显示配置状态，不再进行检测
+    if (备用状态) {
+      备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
+    }
+    if (当前地址) {
+      当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.smartSelection + '</span>';
+    }
+    if (地区值) {
+      地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
+    }
+  } catch (错误20165) {
+    function 获取凭据20164(名称20163) {
+      const 值20162 = '; ' + document.cookie;
+      const 部分列表20161 = 值20162.split('; ' + 名称20163 + '=');
+      if (部分列表20161.length === 2) return 部分列表20161.pop().split(';').shift();
+      return null;
+    }
+    const 浏览器语言20160 = navigator.language || navigator.userLanguage || '';
+    const 已保存语言20159 = localStorage.getItem('preferredLanguage') || 获取凭据20164('preferredLanguage');
+    let 是否值20158 = false;
+    if (已保存语言20159 === 'fa' || 已保存语言20159 === 'fa-IR') {
+      是否值20158 = true;
+    } else {
+      是否值20158 = 浏览器语言20160.includes('fa') || 浏览器语言20160.includes('fa-IR');
+    }
+    const 本地值20157 = {
+      zh: {
+        workerRegion: 'Worker地区: ',
+        detectionMethod: '检测方式: ',
+        proxyIPStatus: '${解码64('UHJveHlJUOeKtuaAgTog')}',
+        currentIP: '当前使用IP: ',
+        regionMatch: '地区匹配: ',
+        detectionFailed: '检测失败'
+      },
+      fa: {
+        workerRegion: 'منطقه Worker: ',
+        detectionMethod: 'روش تشخیص: ',
+        proxyIPStatus: '${解码64('2YjYtti524zYqiBQcm94eUlQOiA=')}',
+        currentIP: 'IP فعلی: ',
+        regionMatch: 'تطبیق منطقه: ',
+        detectionFailed: 'تشخیص ناموفق'
+      }
+    };
+    const 翻译值20156 = 本地值20157[是否值20158 ? 'fa' : 'zh'];
+    document.getElementById('regionStatus').innerHTML = 翻译值20156.workerRegion + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
+    document.getElementById('geoInfo').innerHTML = 翻译值20156.detectionMethod + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
+    document.getElementById('backupStatus').innerHTML = 翻译值20156.proxyIPStatus + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
+    document.getElementById('currentIP').innerHTML = 翻译值20156.currentIP + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
+    document.getElementById('regionMatch').innerHTML = 翻译值20156.regionMatch + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
+  }
+}
+async function 测试接口() {
+  try {
+    function 获取凭据20155(名称20154) {
+      const 值20153 = '; ' + document.cookie;
+      const 部分列表20152 = 值20153.split('; ' + 名称20154 + '=');
+      if (部分列表20152.length === 2) return 部分列表20152.pop().split(';').shift();
+      return null;
+    }
+    const 浏览器语言20151 = navigator.language || navigator.userLanguage || '';
+    const 已保存语言20150 = localStorage.getItem('preferredLanguage') || 获取凭据20155('preferredLanguage');
+    let 是否值20149 = false;
+    if (已保存语言20150 === 'fa' || 已保存语言20150 === 'fa-IR') {
+      是否值20149 = true;
+    } else {
+      是否值20149 = 浏览器语言20151.includes('fa') || 浏览器语言20151.includes('fa-IR');
+    }
+    const 本地值20148 = {
+      zh: {
+        apiTestResult: 'API检测结果: ',
+        apiTestTime: '检测时间: ',
+        apiTestFailed: 'API检测失败: ',
+        unknownError: '未知错误',
+        apiTestError: 'API测试失败: '
+      },
+      fa: {
+        apiTestResult: 'نتیجه تشخیص API: ',
+        apiTestTime: 'زمان تشخیص: ',
+        apiTestFailed: 'تشخیص API ناموفق: ',
+        unknownError: 'خطای ناشناخته',
+        apiTestError: 'تست API ناموفق: '
+      }
+    };
+    const 翻译值20147 = 本地值20148[是否值20149 ? 'fa' : 'zh'];
+    const 响应20146 = await fetch(window.location.pathname + '/test-api');
+    const 数据20145 = await 响应20146.json();
+    if (数据20145.detectedRegion) {
+      显示提示(翻译值20147.apiTestResult + 数据20145.detectedRegion + '\\n' + 翻译值20147.apiTestTime + 数据20145.timestamp, 'info', {
+        duration: 5000
+      });
+    } else {
+      显示提示(翻译值20147.apiTestFailed + (数据20145.error || 翻译值20147.unknownError), 'error', {
+        duration: 4500
+      });
+    }
+  } catch (错误20144) {
+    function 获取凭据20143(名称20142) {
+      const 值20141 = '; ' + document.cookie;
+      const 部分列表20140 = 值20141.split('; ' + 名称20142 + '=');
+      if (部分列表20140.length === 2) return 部分列表20140.pop().split(';').shift();
+      return null;
+    }
+    const 浏览器语言20139 = navigator.language || navigator.userLanguage || '';
+    const 已保存语言20138 = localStorage.getItem('preferredLanguage') || 获取凭据20143('preferredLanguage');
+    let 是否值20137 = false;
+    if (已保存语言20138 === 'fa' || 已保存语言20138 === 'fa-IR') {
+      是否值20137 = true;
+    } else {
+      是否值20137 = 浏览器语言20139.includes('fa') || 浏览器语言20139.includes('fa-IR');
+    }
+    const 本地值20136 = {
+      zh: {
+        apiTestError: 'API测试失败: '
+      },
+      fa: {
+        apiTestError: 'تست API ناموفق: '
+      }
+    };
+    const 翻译值20135 = 本地值20136[是否值20137 ? 'fa' : 'zh'];
+    显示提示(翻译值20135.apiTestError + 错误20144.message, 'error', {
+      duration: 4500
+    });
+  }
+}
+
+// 配置管理相关函数
+async function 检查键值状态() {
+  const 接口网址20134 = window.location.pathname + '/api/config';
+  try {
+    const 响应20133 = await fetch(接口网址20134);
+    function 获取凭据20132(名称20131) {
+      const 值20130 = '; ' + document.cookie;
+      const 部分列表20129 = 值20130.split('; ' + 名称20131 + '=');
+      if (部分列表20129.length === 2) return 部分列表20129.pop().split(';').shift();
+      return null;
+    }
+    const 浏览器语言20128 = navigator.language || navigator.userLanguage || '';
+    const 已保存语言20127 = localStorage.getItem('preferredLanguage') || 获取凭据20132('preferredLanguage');
+    let 是否值20126 = false;
+    if (已保存语言20127 === 'fa' || 已保存语言20127 === 'fa-IR') {
+      是否值20126 = true;
+    } else {
+      是否值20126 = 浏览器语言20128.includes('fa') || 浏览器语言20128.includes('fa-IR');
+    }
+    const 本地值20125 = {
+      zh: {
+        kvDisabled: '⚠️ KV存储未启用或未配置',
+        kvNotConfigured: 'KV存储未配置，无法使用配置管理功能。\\n\\n请在Cloudflare Workers中:\\n1. 创建KV命名空间\\n2. 绑定环境变量 C\\n3. 重新部署代码',
+        kvNotEnabled: 'KV存储未配置',
+        kvEnabled: '✅ KV存储已启用，可以使用配置管理功能',
+        kvCheckFailed: '⚠️ KV存储检测失败',
+        kvCheckFailedFormat: 'KV存储检测失败: 响应格式错误',
+        kvCheckFailedStatus: 'KV存储检测失败 - 状态码: ',
+        kvCheckFailedError: 'KV存储检测失败 - 错误: '
+      },
+      fa: {
+        kvDisabled: '⚠️ ذخیره‌سازی KV فعال نیست یا پیکربندی نشده است',
+        kvNotConfigured: 'ذخیره‌سازی KV پیکربندی نشده است، نمی‌توانید از عملکرد مدیریت تنظیمات استفاده کنید.\\n\\nلطفا در Cloudflare Workers:\\n1. فضای نام KV ایجاد کنید\\n2. متغیر محیطی C را پیوند دهید\\n3. کد را دوباره مستقر کنید',
+        kvNotEnabled: 'ذخیره‌سازی KV پیکربندی نشده است',
+        kvEnabled: '✅ ذخیره‌سازی KV فعال است، می‌توانید از مدیریت تنظیمات استفاده کنید',
+        kvCheckFailed: '⚠️ بررسی ذخیره‌سازی KV ناموفق',
+        kvCheckFailedFormat: 'بررسی ذخیره‌سازی KV ناموفق: خطای فرمت پاسخ',
+        kvCheckFailedStatus: 'بررسی ذخیره‌سازی KV ناموفق - کد وضعیت: ',
+        kvCheckFailedError: 'بررسی ذخیره‌سازی KV ناموفق - خطا: '
+      }
+    };
+    const 翻译值20124 = 本地值20125[是否值20126 ? 'fa' : 'zh'];
+    if (响应20133.status === 503) {
+      // KV未配置
+      document.getElementById('kvStatus').innerHTML = '<span style="color: #ffb400;">' + 翻译值20124.kvDisabled + '</span>';
+      document.getElementById('configCard').style.display = 'block';
+      document.getElementById('currentConfig').textContent = 翻译值20124.kvNotConfigured;
+    } else if (响应20133.ok) {
+      try {
+        const 数据20123 = await 响应20133.json();
+
+        // 检查响应是否包含KV配置信息
+        if (数据20123 && 数据20123.kvEnabled === true) {
+          document.getElementById('kvStatus').innerHTML = '<span style="color: #00ff9d;">' + 翻译值20124.kvEnabled + '</span>';
+          document.getElementById('configContent').style.display = 'block';
+          document.getElementById('configCard').style.display = 'block';
+          await 加载当前配置();
+        } else {
+          document.getElementById('kvStatus').innerHTML = '<span style="color: #ffb400;">' + 翻译值20124.kvDisabled + '</span>';
+          document.getElementById('configCard').style.display = 'block';
+          document.getElementById('currentConfig').textContent = 翻译值20124.kvNotEnabled;
+        }
+      } catch (数据对象错误) {
+        document.getElementById('kvStatus').innerHTML = '<span style="color: #ffb400;">' + 翻译值20124.kvCheckFailed + '</span>';
+        document.getElementById('configCard').style.display = 'block';
+        document.getElementById('currentConfig').textContent = 翻译值20124.kvCheckFailedFormat;
+      }
+    } else {
+      document.getElementById('kvStatus').innerHTML = '<span style="color: #ffb400;">' + 翻译值20124.kvDisabled + '</span>';
+      document.getElementById('configCard').style.display = 'block';
+      document.getElementById('currentConfig').textContent = 翻译值20124.kvCheckFailedStatus + 响应20133.status;
+    }
+  } catch (错误20122) {
+    function 获取凭据(名称) {
+      const 值20121 = '; ' + document.cookie;
+      const 部分列表20120 = 值20121.split('; ' + 名称 + '=');
+      if (部分列表20120.length === 2) return 部分列表20120.pop().split(';').shift();
+      return null;
+    }
+    const 浏览器语言 = navigator.language || navigator.userLanguage || '';
+    const 已保存语言 = localStorage.getItem('preferredLanguage') || 获取凭据('preferredLanguage');
+    let 是否值 = false;
+    if (已保存语言 === 'fa' || 已保存语言 === 'fa-IR') {
+      是否值 = true;
+    } else {
+      是否值 = 浏览器语言.includes('fa') || 浏览器语言.includes('fa-IR');
+    }
+    const 本地值20119 = {
+      zh: {
+        kvDisabled: '⚠️ KV存储未启用或未配置',
+        kvCheckFailedError: 'KV存储检测失败 - 错误: '
+      },
+      fa: {
+        kvDisabled: '⚠️ ذخیره‌سازی KV فعال نیست یا پیکربندی نشده است',
+        kvCheckFailedError: 'بررسی ذخیره‌سازی KV ناموفق - خطا: '
+      }
+    };
+    const 翻译值20118 = 本地值20119[是否值 ? 'fa' : 'zh'];
+    document.getElementById('kvStatus').innerHTML = '<span style="color: #ffb400;">' + 翻译值20118.kvDisabled + '</span>';
+    document.getElementById('configCard').style.display = 'block';
+    document.getElementById('currentConfig').textContent = 翻译值20118.kvCheckFailedError + 错误20122.message;
+  }
+}
+function 读取字段值(标识) {
+  const 元素 = document.getElementById(标识);
+  return 元素 ? 元素.value : '';
+}
+
+function 写入字段值(标识, 值 = '') {
+  const 元素 = document.getElementById(标识);
+  if (元素) 元素.value = 值 || '';
+}
+
+function 是否开关启用(值, 默认启用 = false) {
+  if (值 === undefined || 值 === null || 值 === '') return 默认启用;
+  if (值 === true || 值 === false) return 值;
+  const 文本 = String(值).trim().toLowerCase();
+  if (文本 === 'yes' || 文本 === 'true' || 文本 === '1' || 文本 === 'on') return true;
+  if (文本 === 'no' || 文本 === 'false' || 文本 === '0' || 文本 === 'off') return false;
+  return 默认启用;
+}
+
+function 写入开关值(标识, 值, 默认启用 = false) {
+  const 元素 = document.getElementById(标识);
+  if (元素) 元素.checked = 是否开关启用(值, 默认启用);
+}
+
+function 读取开关值(标识, 默认启用 = false) {
+  const 元素 = document.getElementById(标识);
+  if (!元素) return 默认启用 ? 'yes' : 'no';
+  return 元素.checked ? 'yes' : 'no';
+}
+
+function 同步协议界面状态() {
+  const 明文开关 = document.getElementById('ev');
+  const 木马开关 = document.getElementById('et');
+  const 扩展开关 = document.getElementById('ex');
+  if (明文开关 && 木马开关 && 扩展开关 && !明文开关.checked && !木马开关.checked && !扩展开关.checked) {
+    明文开关.checked = true;
+  }
+}
+
+function 同步联动界面状态() {
+  同步协议界面状态();
+  const 加密客户端问候复选框 = document.getElementById('ech');
+  const 端口控制 = document.getElementById('portControl');
+  if (加密客户端问候复选框 && 端口控制 && 加密客户端问候复选框.checked) {
+    端口控制.value = 'yes';
+  }
+  更新路径类型状态(读取字段值('customPath'));
+  更新工作器地区状态();
+}
+
+function 应用配置到界面(配置) {
+  写入字段值('wkRegion', 配置.wk);
+  写入开关值('ev', 配置.ev, true);
+  写入开关值('et', 配置.et, false);
+  写入开关值('ex', 配置.ex, false);
+  写入开关值('ech', 配置.ech, false);
+  写入字段值('tp', 配置.tp);
+  写入字段值('customDNS', 配置.customDNS);
+  写入字段值('customECHDomain', 配置.customECHDomain);
+  写入字段值('alpn', 配置.alpn);
+  写入字段值('scu', 配置.scu);
+  写入开关值('ena', 配置.ena, false);
+  写入开关值('jk', 配置.jk, false);
+  const 家宽按钮 = document.getElementById('jkClientBtn');
+  if (家宽按钮) 家宽按钮.style.display = 是否开关启用(配置.jk, false) ? '' : 'none';
+  写入开关值('epd', 配置.epd, true);
+  写入开关值('epi', 配置.epi, true);
+  写入开关值('egi', 配置.egi, true);
+  写入开关值('ipv4Enabled', 配置.ipv4, true);
+  写入开关值('ipv6Enabled', 配置.ipv6, true);
+  写入开关值('ispMobile', 配置.ispMobile, true);
+  写入开关值('ispUnicom', 配置.ispUnicom, true);
+  写入开关值('ispTelecom', 配置.ispTelecom, true);
+  写入字段值('customPath', 配置.d);
+  写入字段值('customIP', 配置.p);
+  写入字段值('yx', 配置.yx);
+  写入字段值('yxURL', 配置.yxURL);
+  写入字段值('socksConfig', 配置.s);
+  写入字段值('customHomepage', 配置.homepage);
+  写入字段值('apiEnabled', 配置.ae);
+  写入字段值('regionMatching', 配置.rm);
+  写入字段值('downgradeControl', 配置.qj);
+  写入字段值('portControl', 配置.dkby);
+  写入字段值('preferredControl', 配置.yxby);
+  同步联动界面状态();
+}
+
+function 收集界面配置() {
+  const 配置 = {
+    wk: 读取字段值('wkRegion'),
+    ev: 读取开关值('ev', true),
+    et: 读取开关值('et', false),
+    ex: 读取开关值('ex', false),
+    ech: 读取开关值('ech', false),
+    tp: 读取字段值('tp'),
+    customDNS: 读取字段值('customDNS'),
+    customECHDomain: 读取字段值('customECHDomain'),
+    alpn: 读取字段值('alpn'),
+    d: 读取字段值('customPath'),
+    p: 读取字段值('customIP'),
+    yx: 读取字段值('yx'),
+    yxURL: 读取字段值('yxURL'),
+    s: 读取字段值('socksConfig'),
+    homepage: 读取字段值('customHomepage'),
+    scu: 读取字段值('scu'),
+    ena: 读取开关值('ena', false),
+    jk: 读取开关值('jk', false),
+    epd: 读取开关值('epd', true),
+    epi: 读取开关值('epi', true),
+    egi: 读取开关值('egi', true),
+    ae: 读取字段值('apiEnabled'),
+    rm: 读取字段值('regionMatching'),
+    qj: 读取字段值('downgradeControl'),
+    dkby: 读取字段值('portControl'),
+    yxby: 读取字段值('preferredControl'),
+    ipv4: 读取开关值('ipv4Enabled', true),
+    ipv6: 读取开关值('ipv6Enabled', true),
+    ispMobile: 读取开关值('ispMobile', true),
+    ispUnicom: 读取开关值('ispUnicom', true),
+    ispTelecom: 读取开关值('ispTelecom', true)
+  };
+  if (配置.ev === 'no' && 配置.et === 'no' && 配置.ex === 'no') {
+    配置.ev = 'yes';
+    写入开关值('ev', 'yes', true);
+  }
+  if (配置.ech === 'yes') {
+    配置.dkby = 'yes';
+    写入字段值('portControl', 'yes');
+  }
+  return 配置;
+}
+
+async function 加载当前配置() {
+  const 接口网址20117 = window.location.pathname + '/api/config';
+  try {
+    const 响应20116 = await fetch(接口网址20117);
+    if (响应20116.status === 503) {
+      document.getElementById('currentConfig').textContent = 'KV存储未配置，无法加载配置';
+      return;
+    }
+    if (!响应20116.ok) {
+      const 错误文本20115 = await 响应20116.text();
+      document.getElementById('currentConfig').textContent = '加载配置失败: ' + 错误文本20115;
+      return;
+    }
+    const 配置 = await 响应20116.json();
+
+    // 过滤掉内部字段 kvEnabled
+    const 显示配置 = {};
+    for (const [键20114, 值20113] of Object.entries(配置)) {
+      if (键20114 !== 'kvEnabled') {
+        显示配置[键20114] = 值20113;
+      }
+    }
+    let 配置文本 = '当前配置:\\n';
+    if (Object.keys(显示配置).length === 0) {
+      配置文本 += '(暂无配置)';
+    } else {
+      for (const [键, 值20112] of Object.entries(显示配置)) {
+        配置文本 += 键 + ': ' + (值20112 || '(未设置)') + '\\n';
+      }
+    }
+    document.getElementById('currentConfig').textContent = 配置文本;
+
+    应用配置到界面(配置);
+  } catch (错误20111) {
+    document.getElementById('currentConfig').textContent = '加载配置失败: ' + 错误20111.message;
+  }
+}
+
+// 更新路径类型显示
+function 更新路径类型状态(自定义路径) {
+  const 路径类型状态 = document.getElementById('pathTypeStatus');
+  const 当前网址20110 = window.location.href;
+  const 路径部分列表 = window.location.pathname.split('/').filter(参数值20109 => 参数值20109);
+  const 当前路径 = 路径部分列表.length > 0 ? 路径部分列表[0] : '';
+  if (自定义路径 && 自定义路径.trim()) {
+    // 使用自定义路径 (d)
+    路径类型状态.innerHTML = '<div style="color: #00ff9d;">使用类型: <strong>自定义路径 (d)</strong></div>' + '<div style="margin-top: 5px; color: #00f0ff;">当前路径: <span style="color: #ffb400;">' + 自定义路径 + '</span></div>' + '<div style="margin-top: 5px; font-size: 0.9rem; color: #7aa9c4;">访问地址: ' + (当前网址20110.split('/')[0] + '//' + 当前网址20110.split('/')[2]) + 自定义路径 + '/sub</div>';
+  } else {
+    // 使用 UUID (u)
+    路径类型状态.innerHTML = '<div style="color: #00ff9d;">使用类型: <strong>UUID 路径 (u)</strong></div>' + '<div style="margin-top: 5px; color: #00f0ff;">当前路径: <span style="color: #ffb400;">' + (当前路径 || '(UUID)') + '</span></div>' + '<div style="margin-top: 5px; font-size: 0.9rem; color: #7aa9c4;">访问地址: ' + 当前网址20110.split('/sub')[0] + '/sub</div>';
+  }
+}
+
+// 更新wk地区选择的启用/禁用状态
+function 更新工作器地区状态() {
+  const 自定义地址输入20108 = document.getElementById('customIP');
+  const 值地区 = document.getElementById('wkRegion');
+  const 值地区值 = document.getElementById('wkRegionHint');
+  if (自定义地址输入20108 && 值地区) {
+    const 是否有自定义地址 = 自定义地址输入20108.value.trim() !== '';
+    值地区.disabled = 是否有自定义地址;
+
+    // 添加视觉反馈
+    if (是否有自定义地址) {
+      值地区.style.opacity = '0.5';
+      值地区.style.cursor = 'not-allowed';
+      值地区.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      // 显示提示信息
+      if (值地区值) {
+        值地区值.style.display = 'block';
+        值地区值.style.color = '#ffb400';
+      }
+    } else {
+      值地区.style.opacity = '1';
+      值地区.style.cursor = 'pointer';
+      值地区.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+      // 隐藏提示信息
+      if (值地区值) {
+        值地区值.style.display = 'none';
+      }
+    }
+  }
+}
+async function 保存配置(配置数据20107) {
+  const 接口网址 = window.location.pathname + '/api/config';
+  try {
+    const 响应20106 = await fetch(接口网址, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(配置数据20107)
+    });
+    if (响应20106.status === 503) {
+      显示状态('KV存储未配置，无法保存配置。请先在Cloudflare Workers中配置KV存储。', 'error');
+      return;
+    }
+    if (!响应20106.ok) {
+      const 错误文本20105 = await 响应20106.text();
+
+      // 尝试解析 JSON 错误信息
+      try {
+        const 错误数据20104 = JSON.parse(错误文本20105);
+        显示状态(错误数据20104.message || '保存失败', 'error');
+      } catch (解析错误20103) {
+        // 如果不是 JSON，直接显示文本
+        显示状态('保存失败: ' + 错误文本20105, 'error');
+      }
+      return;
+    }
+    const 结果20102 = await 响应20106.json();
+    显示状态(结果20102.message, 结果20102.success ? 'success' : 'error');
+    if (结果20102.success) {
+      await 加载当前配置();
+      // 更新wk地区选择状态
+      更新工作器地区状态();
+      // 保存成功后刷新页面以更新系统状态
+      setTimeout(function () {
+        window.location.reload();
+      }, 1500);
+    } else {}
+  } catch (错误20101) {
+    显示状态('保存失败: ' + 错误20101.message, 'error');
+  }
+}
+function 显示状态(消息20100, 类型20099) {
+  const 状态值 = document.getElementById('statusMessage');
+  if (状态值) {
+    状态值.textContent = 消息20100;
+    状态值.style.display = 'block';
+    状态值.style.color = 类型20099 === 'success' ? '#00f0ff' : '#ff3860';
+    状态值.style.borderColor = 类型20099 === 'success' ? '#00f0ff' : '#ff3860';
+    setTimeout(function () {
+      状态值.style.display = 'none';
+    }, 3000);
+  }
+  // 同步在底部操作条上方弹出霓虹反馈
+  if (typeof window.显示操作状态 === 'function') {
+    window.显示操作状态(消息20100, 类型20099 === 'success' ? 'ok' : 'err');
+  }
+}
+async function 重置全部配置() {
+  if (confirm('确定要重置所有配置吗？这将清空所有KV配置，恢复为环境变量设置。')) {
+    try {
+      const 响应20098 = await fetch(window.location.pathname + '/api/config', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          wk: '',
+          d: '',
+          p: '',
+          yx: '',
+          yxURL: '',
+          s: '',
+          ae: '',
+          rm: '',
+          qj: '',
+          dkby: '',
+          yxby: '',
+          ev: '',
+          et: '',
+          ex: '',
+          ech: '',
+          tp: '',
+          customDNS: '',
+          customECHDomain: '',
+          scu: '',
+          epd: '',
+          epi: '',
+          egi: '',
+          ipv4: '',
+          ipv6: '',
+          ispMobile: '',
+          ispUnicom: '',
+          ispTelecom: '',
+          homepage: '',
+          alpn: ''
+        })
+      });
+      if (响应20098.status === 503) {
+        显示状态('KV存储未配置，无法重置配置。', 'error');
+        return;
+      }
+      if (!响应20098.ok) {
+        const 错误文本 = await 响应20098.text();
+
+        // 尝试解析 JSON 错误信息
+        try {
+          const 错误数据 = JSON.parse(错误文本);
+          显示状态(错误数据.message || '重置失败', 'error');
+        } catch (解析错误) {
+          // 如果不是 JSON，直接显示文本
+          显示状态('重置失败: ' + 错误文本, 'error');
+        }
+        return;
+      }
+      const 结果20097 = await 响应20098.json();
+      显示状态(结果20097.message || '配置已重置', 结果20097.success ? 'success' : 'error');
+      if (结果20097.success) {
+        await 加载当前配置();
+        // 更新wk地区选择状态
+        更新工作器地区状态();
+        // 刷新页面以更新系统状态
+        setTimeout(function () {
+          window.location.reload();
+        }, 1500);
+      }
+    } catch (错误20096) {
+      显示状态('重置失败: ' + 错误20096.message, 'error');
+    }
+  }
+}
+async function 检查加密问候状态() {
+  const 加密客户端问候状态值 = document.getElementById('echStatus');
+  if (!加密客户端问候状态值) return;
+  try {
+    const 当前网址 = window.location.href;
+    const 订阅网址 = 当前网址 + '/sub';
+    加密客户端问候状态值.innerHTML = 'ECH状态: <span style="color: #ffb400;">检测中...</span>';
+    const 响应20095 = await fetch(订阅网址, {
+      method: 'GET',
+      headers: {
+        'Accept': 'text/plain'
+      }
+    });
+    const 加密客户端问候状态头部 = 响应20095.headers.get('X-ECH-Status');
+    const 加密客户端问候配置长度 = 响应20095.headers.get('X-ECH-Config-Length');
+    if (加密客户端问候状态头部 === 'ENABLED') {
+      加密客户端问候状态值.innerHTML = 'ECH状态: <span style="color: #00ff9d;">✅ 已启用' + (加密客户端问候配置长度 ? ' (配置长度: ' + 加密客户端问候配置长度 + ')' : '') + '</span>';
+    } else {
+      加密客户端问候状态值.innerHTML = 'ECH状态: <span style="color: #ffb400;">⚠️ 未启用</span>';
+    }
+  } catch (错误20094) {
+    加密客户端问候状态值.innerHTML = 'ECH状态: <span style="color: #ff3860;">❌ 检测失败: ' + 错误20094.message + '</span>';
+  }
+}
+document.addEventListener('DOMContentLoaded', function () {
+  创建矩阵雨();
+  检查系统状态();
+  检查键值状态();
+  检查加密问候状态();
+
+  // ECH 开启时自动联动开启仅TLS
+  const 加密客户端问候复选框 = document.getElementById('ech');
+  const 端口控制 = document.getElementById('portControl');
+  if (加密客户端问候复选框 && 端口控制) {
+    加密客户端问候复选框.addEventListener('change', function () {
+      if (this.checked) {
+        // ECH 开启时，自动设置仅TLS为 yes
+        端口控制.value = 'yes';
+      }
+      同步联动界面状态();
+    });
+
+    // 页面加载时，如果 ECH 已勾选，也自动设置仅TLS
+    if (加密客户端问候复选框.checked) {
+      端口控制.value = 'yes';
+    }
+  }
+
+  // 监听customIP输入框变化，实时更新wk地区选择状态
+  const 自定义地址输入 = document.getElementById('customIP');
+  if (自定义地址输入) {
+    自定义地址输入.addEventListener('input', function () {
+      同步联动界面状态();
+    });
+  }
+
+
+  const 自定义路径输入 = document.getElementById('customPath');
+  if (自定义路径输入) {
+    自定义路径输入.addEventListener('input', function () {
+      同步联动界面状态();
+    });
+  }
+
+  ['ev', 'et', 'ex'].forEach(function (协议标识) {
+    const 协议开关 = document.getElementById(协议标识);
+    if (协议开关) {
+      协议开关.addEventListener('change', function () {
+        同步联动界面状态();
+      });
+    }
+  });
+
+  // 阻止表单默认提交（保存按钮已统一到底部操作条）
+  ['regionForm', 'otherConfigForm', 'advancedConfigForm'].forEach(function (本地值20093) {
+    const 表单值 = document.getElementById(本地值20093);
+    if (表单值) 表单值.addEventListener('submit', function (事件值20092) {
+      事件值20092.preventDefault();
+    });
+  });
+
+  // 在任意输入框按下回车，触发统一保存
+  document.querySelectorAll('#configContent input[type="text"], #configContent input[type="number"]').forEach(function (本地值20091) {
+    本地值20091.addEventListener('keydown', function (事件值20090) {
+      if (事件值20090.key === 'Enter') {
+        事件值20090.preventDefault();
+        保存全部配置();
+      }
+    });
+  });
+
+  // 统一保存：一次性收齐所有字段
+  function 收集全部配置() {
+    return 收集界面配置();
+  }
+  async function 保存全部配置() {
+    // 至少启用一个通道
+    const 值值20085 = document.getElementById('ev'),
+      值值20

@@ -1,0 +1,874 @@
+  const 结果值141 = await 读取器.read();
+          if (结果值141.done) {
+            break;
+          }
+          值值143 = Date.now();
+          await 写入器.write(结果值141.value);
+          块数量++;
+          if (块数量 % 5 === 0) {
+            await 处理扩展超文本值195(0);
+          }
+        }
+        await 写入器.close();
+        本地值148();
+      } catch (错误140) {
+        本地值147(错误140);
+      } finally {
+        try {
+          读取器.releaseLock();
+        } catch (忽略值139) {}
+        try {
+          写入器.releaseLock();
+        } catch (忽略值138) {}
+        clearInterval(值计时器);
+      }
+    })();
+  });
+  return {
+    readable: 流.readable,
+    counter: 计数器,
+    done: 本地值149,
+    abort: () => {
+      try {
+        流.readable.cancel();
+      } catch (忽略值137) {}
+      try {
+        流.writable.abort();
+      } catch (忽略值136) {}
+    }
+  };
+}
+// 用一个远程套接字装配上下行器：uploader 负责写 vless 首包与后续上行，downloader 回灌 resp+下行
+function 装配扩展超文本连接(首包, 远程套接字) {
+  const uploader = 创建扩展超文本值159(首包, 远程套接字.writable);
+  const downloader = 创建扩展超文本值(首包.resp, 远程套接字.readable);
+  return {
+    downloader,
+    uploader,
+    close: () => {
+      try {
+        远程套接字.close();
+      } catch (忽略关闭) {}
+    }
+  };
+}
+// 出站决策与 ws 的 处理值值384 对齐：接入 s（代理）、wk/rm（地区匹配备用地址）、qj（代理降级/仅走代理）
+async function 连接值远程扩展超文本(首包, 请求值扩展 = null) {
+  const 主机 = 首包.hostname;
+  const 端口 = 首包.port;
+  const 直连 = async (地址, 端口值) => 连接值套接字(地址, 端口值, 请求值扩展, 传输连接竞速数);
+  const 走代理 = async (地址, 端口值) => 处理值代理连接(地址类型_网址, 地址, 端口值, 已解析代理5配置, 请求值扩展, null);
+  // 计算回退目标：优先 p（回退地址），否则按 wk/rm 取地区匹配备用地址
+  const 取回退目标 = async () => {
+    if (回退地址 && 回退地址.trim()) {
+      const 已解析 = 解析地址值端口(回退地址);
+      return {
+        address: 已解析.address,
+        port: 已解析.port || 端口
+      };
+    }
+    const 备用 = await 获取值备用地址(当前工作器地区, 启用地区匹配);
+    return 备用 ? {
+      address: 备用.domain,
+      port: 备用.port
+    } : {
+      address: 主机,
+      port: 端口
+    };
+  };
+  const 首跳走代理 = 仅走代理 && 是否代理已启用 ? true : 启用代理降级 ? false : 是否代理已启用;
+  try {
+    const 套接字 = 首跳走代理 ? await 走代理(主机, 端口) : await 直连(主机, 端口);
+    return 装配扩展超文本连接(首包, 套接字);
+  } catch (首跳错误) {
+    // 只走代理：首跳失败不回落直连，避免出口 IP 泄漏
+    if (仅走代理 && 是否代理已启用) return null;
+    try {
+      if (启用代理降级 && 是否代理已启用) {
+        try {
+          const 代理套接字 = await 走代理(主机, 端口);
+          return 装配扩展超文本连接(首包, 代理套接字);
+        } catch (代理错误) {
+          const 回退 = await 取回退目标();
+          const 回退套接字 = await 直连(回退.address, 回退.port);
+          return 装配扩展超文本连接(首包, 回退套接字);
+        }
+      }
+      const 回退 = await 取回退目标();
+      const 回退套接字 = 是否代理已启用 ? await 走代理(回退.address, 回退.port) : await 直连(回退.address, 回退.port);
+      return 装配扩展超文本连接(首包, 回退套接字);
+    } catch (回退错误) {
+      return null;
+    }
+  }
+}
+async function 处理扩展超文本客户端(主体128, 唯一标识, 请求值扩展 = null) {
+  if (值值197 >= 上限值) {
+    return new Response('Too many connections', {
+      status: 429
+    });
+  }
+  值值197++;
+  let 本地值127 = false;
+  const 本地值126 = () => {
+    if (!本地值127) {
+      值值197 = Math.max(0, 值值197 - 1);
+      本地值127 = true;
+    }
+  };
+  try {
+    const 本地值125 = await 读取扩展超文本头部(主体128, 唯一标识);
+    if (typeof 本地值125 !== 'object' || !本地值125) {
+      return null;
+    }
+    const 远程连接 = await 连接值远程扩展超文本(本地值125, 请求值扩展);
+    if (远程连接 === null) {
+      return null;
+    }
+    const 连接值 = Promise.race([(async () => {
+      try {
+        await 远程连接.downloader.done;
+      } catch (错误124) {}
+    })(), (async () => {
+      try {
+        await 远程连接.uploader.done;
+      } catch (错误123) {}
+    })(), 处理扩展超文本值195(值超时值).then(() => {})]).finally(() => {
+      try {
+        远程连接.close();
+      } catch (忽略值122) {}
+      try {
+        远程连接.downloader.abort();
+      } catch (忽略值121) {}
+      try {
+        远程连接.uploader.abort();
+      } catch (忽略值) {}
+      本地值126();
+    });
+    return {
+      readable: 远程连接.downloader.readable,
+      closed: 连接值
+    };
+  } catch (错误120) {
+    本地值126();
+    return null;
+  }
+}
+async function 处理扩展超文本值(请求119) {
+  try {
+    return await 处理扩展超文本客户端(请求119.body, 认证令牌, 请求119.fetcher);
+  } catch (错误118) {
+    return null;
+  }
+}
+function 处理基础64值数组(值64字符串) {
+  if (!值64字符串) return {
+    error: null
+  };
+  try {
+    值64字符串 = 值64字符串.replace(/-/g, '+').replace(/_/g, '/');
+    return {
+      earlyData: Uint8Array.from(atob(值64字符串), 丙值117 => 丙值117.charCodeAt(0)).buffer,
+      error: null
+    };
+  } catch (错误116) {
+    return {
+      error: 错误116
+    };
+  }
+}
+function 关闭套接字值(套接字) {
+  try {
+    if (套接字.readyState === 1 || 套接字.readyState === 2) 套接字.close();
+  } catch (错误115) {}
+}
+const 十六进制值 = Array.from({
+  length: 256
+}, (取值, 索引值) => (索引值 + 256).toString(16).slice(1));
+function 处理格式值(本地值114, 偏移 = 0) {
+  const 标识 = (十六进制值[本地值114[偏移]] + 十六进制值[本地值114[偏移 + 1]] + 十六进制值[本地值114[偏移 + 2]] + 十六进制值[本地值114[偏移 + 3]] + "-" + 十六进制值[本地值114[偏移 + 4]] + 十六进制值[本地值114[偏移 + 5]] + "-" + 十六进制值[本地值114[偏移 + 6]] + 十六进制值[本地值114[偏移 + 7]] + "-" + 十六进制值[本地值114[偏移 + 8]] + 十六进制值[本地值114[偏移 + 9]] + "-" + 十六进制值[本地值114[偏移 + 10]] + 十六进制值[本地值114[偏移 + 11]] + 十六进制值[本地值114[偏移 + 12]] + 十六进制值[本地值114[偏移 + 13]] + 十六进制值[本地值114[偏移 + 14]] + 十六进制值[本地值114[偏移 + 15]]).toLowerCase();
+  if (!是否有效格式(标识)) throw new TypeError(错误_无效标识字符串);
+  return 标识;
+}
+async function 获取值解析新地址列表() {
+  const 网址113 = 优选地址源;
+  try {
+    const 网址列表112 = 网址113.includes(',') ? 网址113.split(',').map(网址值111 => 网址值111.trim()).filter(网址值 => 网址值) : [网址113];
+    const 接口结果列表 = await 获取优选接口(网址列表112, '443', 5000);
+    if (接口结果列表.length > 0) {
+      const 结果列表110 = [];
+      const 正则 = /^(\[[\da-fA-F:]+\]|[\d.]+|[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*)(?::(\d+))?(?:#(.+))?$/;
+      for (const 项目109 of 接口结果列表) {
+        const 本地值108 = 项目109.match(正则);
+        if (本地值108) {
+          结果列表110.push({
+            ip: 规范化节点主机(本地值108[1]),
+            port: parseInt(本地值108[2] || '443', 10),
+            name: 本地值108[3]?.trim() || 本地值108[1]
+          });
+        }
+      }
+      return 结果列表110;
+    }
+    const 响应107 = await fetch(网址113);
+    if (!响应107.ok) return [];
+    const 文本106 = await 响应107.text();
+    const 结果列表105 = [];
+    const 行列表104 = 文本106.trim().replace(/\r/g, "").split('\n');
+    const 值正则 = /^([^:]+):(\d+)#(.*)$/;
+    for (const 行103 of 行列表104) {
+      const 值行 = 行103.trim();
+      if (!值行) continue;
+      const 本地值102 = 值行.match(值正则);
+      if (本地值102) {
+        结果列表105.push({
+          ip: 本地值102[1],
+          port: parseInt(本地值102[2], 10),
+          name: 本地值102[3].trim() || 本地值102[1]
+        });
+      }
+    }
+    return 结果列表105;
+  } catch (错误101) {
+    return [];
+  }
+}
+function 生成链接列表来源新地址列表(列表100, 用户99, 工作器域名98, 加密客户端问候配置97 = null, 跳过编号96 = false, 别名命名器95 = null) {
+  const 云墙超文本端口94 = [80, 8080, 8880, 2052, 2082, 2086, 2095];
+  const 云墙安全超文本端口93 = [443, 2053, 2083, 2087, 2096, 8443];
+  const 链接列表92 = [];
+  const 网页套接字路径91 = '/?ed=2048';
+  const 协议 = atob('dmxlc3M=');
+  const 制作节点名称90 = 别名命名器95 || 创建值节点命名器(跳过编号96);
+  for (const 项目89 of 列表100) {
+    const 端口88 = 项目89.port;
+    const 安全地址87 = 项目89.ip.includes(':') ? `[${项目89.ip}]` : 项目89.ip;
+    if (云墙安全超文本端口93.includes(端口88)) {
+      const 网页套接字节点名称86 = 制作节点名称90(项目89);
+      let 链接85 = `${协议}://${用户99}@${安全地址87}:${端口88}?encryption=none&security=tls&sni=${工作器域名98}&fp=chrome&type=ws&host=${工作器域名98}&path=${网页套接字路径91}`;
+      if (自定义应用层协议协商) 链接85 += `&alpn=${encodeURIComponent(自定义应用层协议协商)}`;
+
+      // 如果启用了ECH，添加ech参数（ECH需要伪装成Chrome浏览器）
+      if (启用加密客户端问候) {
+        const 域名系统值84 = 自定义域名系统 || 'https://223.5.5.5/dns-query';
+        const 加密客户端问候域名83 = 自定义加密客户端问候域名 || 'cloudflare-ech.com';
+        链接85 += `&ech=${encodeURIComponent(`${加密客户端问候域名83}+${域名系统值84}`)}`;
+      }
+      链接85 += `#${encodeURIComponent(网页套接字节点名称86)}`;
+      链接列表92.push(链接85);
+    } else if (云墙超文本端口94.includes(端口88)) {
+      if (!禁用非传输层安全) {
+        const 网页套接字节点名称82 = 制作节点名称90(项目89);
+        const 链接81 = `${协议}://${用户99}@${安全地址87}:${端口88}?encryption=none&security=none&type=ws&host=${工作器域名98}&path=${网页套接字路径91}#${encodeURIComponent(网页套接字节点名称82)}`;
+        链接列表92.push(链接81);
+      }
+    } else {
+      const 网页套接字节点名称80 = 制作节点名称90(项目89);
+      let 链接79 = `${协议}://${用户99}@${安全地址87}:${端口88}?encryption=none&security=tls&sni=${工作器域名98}&fp=chrome&type=ws&host=${工作器域名98}&path=${网页套接字路径91}`;
+      if (自定义应用层协议协商) 链接79 += `&alpn=${encodeURIComponent(自定义应用层协议协商)}`;
+
+      // 如果启用了ECH，添加ech参数（ECH需要伪装成Chrome浏览器）
+      if (启用加密客户端问候) {
+        const 域名系统值78 = 自定义域名系统 || 'https://223.5.5.5/dns-query';
+        const 加密客户端问候域名77 = 自定义加密客户端问候域名 || 'cloudflare-ech.com';
+        链接79 += `&ech=${encodeURIComponent(`${加密客户端问候域名77}+${域名系统值78}`)}`;
+      }
+      链接79 += `#${encodeURIComponent(网页套接字节点名称80)}`;
+      链接列表92.push(链接79);
+    }
+  }
+  return 链接列表92;
+}
+function 生成扩展超文本链接列表来源源(列表76, 用户75, 工作器域名74, 加密客户端问候配置73 = null, 跳过编号72 = false, 别名命名器71 = null) {
+  const 链接列表70 = [];
+  const 节点路径 = 用户75.substring(0, 8);
+  const 制作节点名称69 = 别名命名器71 || 创建值节点命名器(跳过编号72);
+  for (const 项目68 of 列表76) {
+    const 安全地址67 = 项目68.ip.includes(':') ? `[${项目68.ip}]` : 项目68.ip;
+    const 端口66 = 项目68.port || 443;
+    const 网页套接字节点名称65 = 制作节点名称69(项目68);
+    const 参数 = new URLSearchParams({
+      encryption: 'none',
+      security: 'tls',
+      sni: 工作器域名74,
+      fp: 'chrome',
+      type: 'xhttp',
+      host: 工作器域名74,
+      path: `/${节点路径}`,
+      mode: 'stream-one'
+    });
+    const { 头: 叉填充头65, 键: 叉填充键65 } = 获取叉HTTP填充标识(用户75);
+    参数.set('extra', JSON.stringify({
+      xPaddingObfsMode: true,
+      xPaddingMethod: 'tokenish',
+      xPaddingPlacement: 'queryInHeader',
+      xPaddingHeader: 叉填充头65,
+      xPaddingKey: 叉填充键65
+    }));
+    处理值应用层协议协商值(参数);
+    if (启用加密客户端问候) {
+      const 域名系统值64 = 自定义域名系统 || 'https://223.5.5.5/dns-query';
+      const 加密客户端问候域名63 = 自定义加密客户端问候域名 || 'cloudflare-ech.com';
+      参数.set('ech', `${加密客户端问候域名63}+${域名系统值64}`);
+    }
+    链接列表70.push(`${解码64('dmxlc3M6Ly8=')}${用户75}@${安全地址67}:${端口66}?${参数.toString()}#${encodeURIComponent(网页套接字节点名称65)}`);
+  }
+  return 链接列表70;
+}
+async function 生成木马链接列表来源新地址列表(列表, 用户, 工作器域名, 加密客户端问候配置 = null, 跳过编号 = false, 别名命名器 = null) {
+  const 云墙超文本端口 = [80, 8080, 8880, 2052, 2082, 2086, 2095];
+  const 云墙安全超文本端口 = [443, 2053, 2083, 2087, 2096, 8443];
+  const 链接列表 = [];
+  const 网页套接字路径 = '/?ed=2048';
+  const 密码 = 传输路径 || 用户;
+  const 制作节点名称 = 别名命名器 || 创建值节点命名器(跳过编号);
+  for (const 项目62 of 列表) {
+    const 端口61 = 项目62.port;
+    const 安全地址 = 项目62.ip.includes(':') ? `[${项目62.ip}]` : 项目62.ip;
+    if (云墙安全超文本端口.includes(端口61)) {
+      const 网页套接字节点名称60 = 制作节点名称(项目62);
+      let 链接59 = `${atob('dHJvamFuOi8v')}${密码}@${安全地址}:${端口61}?security=tls&sni=${工作器域名}&fp=chrome&type=ws&host=${工作器域名}&path=${网页套接字路径}`;
+      if (自定义应用层协议协商) 链接59 += `&alpn=${encodeURIComponent(自定义应用层协议协商)}`;
+
+      // 如果启用了ECH，添加ech参数（ECH需要伪装成Chrome浏览器）
+      if (启用加密客户端问候) {
+        const 域名系统值58 = 自定义域名系统 || 'https://223.5.5.5/dns-query';
+        const 加密客户端问候域名57 = 自定义加密客户端问候域名 || 'cloudflare-ech.com';
+        链接59 += `&ech=${encodeURIComponent(`${加密客户端问候域名57}+${域名系统值58}`)}`;
+      }
+      链接59 += `#${encodeURIComponent(网页套接字节点名称60)}`;
+      链接列表.push(链接59);
+    } else if (云墙超文本端口.includes(端口61)) {
+      if (!禁用非传输层安全) {
+        const 网页套接字节点名称56 = 制作节点名称(项目62);
+        const 链接55 = `${atob('dHJvamFuOi8v')}${密码}@${安全地址}:${端口61}?security=none&type=ws&host=${工作器域名}&path=${网页套接字路径}#${encodeURIComponent(网页套接字节点名称56)}`;
+        链接列表.push(链接55);
+      }
+    } else {
+      const 网页套接字节点名称 = 制作节点名称(项目62);
+      let 链接 = `${atob('dHJvamFuOi8v')}${密码}@${安全地址}:${端口61}?security=tls&sni=${工作器域名}&fp=chrome&type=ws&host=${工作器域名}&path=${网页套接字路径}`;
+      if (自定义应用层协议协商) 链接 += `&alpn=${encodeURIComponent(自定义应用层协议协商)}`;
+
+      // 如果启用了ECH，添加ech参数（ECH需要伪装成Chrome浏览器）
+      if (启用加密客户端问候) {
+        const 域名系统值 = 自定义域名系统 || 'https://223.5.5.5/dns-query';
+        const 加密客户端问候域名 = 自定义加密客户端问候域名 || 'cloudflare-ech.com';
+        链接 += `&ech=${encodeURIComponent(`${加密客户端问候域名}+${域名系统值}`)}`;
+      }
+      链接 += `#${encodeURIComponent(网页套接字节点名称)}`;
+      链接列表.push(链接);
+    }
+  }
+  return 链接列表;
+}
+async function 处理配置接口(请求54, 环境值 = {}) {
+  if (请求54.method === 'GET') {
+    if (!键值存储) {
+      return new Response(JSON.stringify({
+        error: 'KV存储未配置',
+        kvEnabled: false
+      }), {
+        status: 503,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+    return new Response(JSON.stringify({
+      ...获取有效配置快照(环境值),
+      kvEnabled: true
+    }), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  } else if (请求54.method === 'POST') {
+    if (!键值存储) {
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'KV存储未配置，无法保存配置'
+      }), {
+        status: 503,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+    try {
+      const 新配置 = await 请求54.json();
+      for (const [键, 值] of Object.entries(新配置)) {
+        if (值 === '' || 值 === null || 值 === undefined) {
+          delete 键值配置[键];
+        } else {
+          键值配置[键] = 值;
+        }
+      }
+      await 保存键值配置();
+      更新配置值();
+      if (新配置.yx !== undefined) {
+        更新自定义优选来源值();
+      }
+      return new Response(JSON.stringify({
+        success: true,
+        message: '配置已保存',
+        config: 获取有效配置快照(环境值)
+      }), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (错误53) {
+      return new Response(JSON.stringify({
+        success: false,
+        message: '保存配置失败: ' + 错误53.message
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+  }
+  return new Response(JSON.stringify({
+    error: 'Method not allowed'
+  }), {
+    status: 405,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+}
+async function 处理优选地址列表接口(请求) {
+  if (!键值存储) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: 'KV存储未配置',
+      message: '需要配置KV存储才能使用此功能'
+    }), {
+      status: 503,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  const 本地值52 = 获取配置值('ae', '') === 'yes';
+  if (!本地值52) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: 'API功能未启用',
+      message: '出于安全考虑，优选IP API功能默认关闭。请在配置管理页面开启"允许API管理"选项后使用。'
+    }), {
+      status: 403,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  try {
+    if (请求.method === 'GET') {
+      const 值值51 = 获取配置值('yx', '');
+      const 本地值50 = 解析值值数组(值值51);
+      return new Response(JSON.stringify({
+        success: true,
+        count: 本地值50.length,
+        data: 本地值50
+      }), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } else if (请求.method === 'POST') {
+      const 主体49 = await 请求.json();
+      const 地址列表值添加 = Array.isArray(主体49) ? 主体49 : [主体49];
+      if (地址列表值添加.length === 0) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: '请求数据为空',
+          message: '请提供IP数据'
+        }), {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+      const 值值48 = 获取配置值('yx', '');
+      let 本地值47 = 解析值值数组(值值48);
+      const 值地址列表46 = [];
+      const 值地址列表45 = [];
+      const 错误列表 = [];
+      for (const 项目44 of 地址列表值添加) {
+        if (!项目44.ip) {
+          错误列表.push({
+            ip: '未知',
+            reason: 'IP地址是必需的'
+          });
+          continue;
+        }
+        const 端口43 = 项目44.port || 443;
+        const 名称 = 项目44.name || `API优选-${项目44.ip}:${端口43}`;
+        if (!是否有效地址(项目44.ip) && !是否有效域名(项目44.ip)) {
+          错误列表.push({
+            ip: 项目44.ip,
+            reason: '无效的IP或域名格式'
+          });
+          continue;
+        }
+        const 本地值42 = 本地值47.some(值项目 => 值项目.ip === 项目44.ip && 值项目.port === 端口43);
+        if (本地值42) {
+          值地址列表45.push({
+            ip: 项目44.ip,
+            port: 端口43,
+            reason: '已存在'
+          });
+          continue;
+        }
+        const 新地址 = {
+          ip: 项目44.ip,
+          port: 端口43,
+          name: 名称,
+          addedAt: new Date().toISOString()
+        };
+        本地值47.push(新地址);
+        值地址列表46.push(新地址);
+      }
+      if (值地址列表46.length > 0) {
+        const 新值值41 = 处理数组值值(本地值47);
+        await 设置配置值('yx', 新值值41);
+        更新自定义优选来源值();
+      }
+      return new Response(JSON.stringify({
+        success: 值地址列表46.length > 0,
+        message: `成功添加 ${值地址列表46.length} 个IP`,
+        added: 值地址列表46.length,
+        skipped: 值地址列表45.length,
+        errors: 错误列表.length,
+        data: {
+          addedIPs: 值地址列表46,
+          skippedIPs: 值地址列表45.length > 0 ? 值地址列表45 : undefined,
+          errors: 错误列表.length > 0 ? 错误列表 : undefined
+        }
+      }), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } else if (请求.method === 'DELETE') {
+      const 主体 = await 请求.json();
+      if (主体.all === true) {
+        const 值值40 = 获取配置值('yx', '');
+        const 本地值39 = 解析值值数组(值值40);
+        const 值数量 = 本地值39.length;
+        await 设置配置值('yx', '');
+        更新自定义优选来源值();
+        return new Response(JSON.stringify({
+          success: true,
+          message: `已清空所有优选IP，共删除 ${值数量} 个`,
+          deletedCount: 值数量
+        }), {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+      if (!主体.ip) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'IP地址是必需的',
+          message: '请提供要删除的ip字段，或使用 {"all": true} 清空所有'
+        }), {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+      const 端口38 = 主体.port || 443;
+      const 值值37 = 获取配置值('yx', '');
+      let 本地值36 = 解析值值数组(值值37);
+      const 值长度 = 本地值36.length;
+      const 值地址列表 = 本地值36.filter(项目35 => !(项目35.ip === 主体.ip && 项目35.port === 端口38));
+      if (值地址列表.length === 值长度) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: '优选IP不存在',
+          message: `${主体.ip}:${端口38} 未找到`
+        }), {
+          status: 404,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+      const 新值值 = 处理数组值值(值地址列表);
+      await 设置配置值('yx', 新值值);
+      更新自定义优选来源值();
+      return new Response(JSON.stringify({
+        success: true,
+        message: '优选IP已删除',
+        deleted: {
+          ip: 主体.ip,
+          port: 端口38
+        }
+      }), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    } else {
+      return new Response(JSON.stringify({
+        success: false,
+        error: '不支持的请求方法',
+        message: '支持的方法: GET, POST, DELETE'
+      }), {
+        status: 405,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+  } catch (错误34) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: '处理请求失败',
+      message: 错误34.message
+    }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+}
+function 更新配置值() {
+  const 有效配置 = 获取有效配置快照();
+  const 手动地区 = 有效配置.wk;
+  if (手动地区 && 手动地区.trim()) {
+    手动工作器地区 = 手动地区.trim().toUpperCase();
+    当前工作器地区 = 手动工作器地区;
+  } else {
+    const 本地值 = 有效配置.p;
+    if (本地值 && 本地值.trim()) {
+      当前工作器地区 = 'CUSTOM';
+    } else {
+      手动工作器地区 = '';
+      当前工作器地区 = '';
+    }
+  }
+  启用地区匹配 = !(有效配置.rm && 有效配置.rm.toLowerCase() === 'no');
+  启用明文 = 有效配置.ev === 'yes';
+  启用木马 = 有效配置.et === 'yes';
+  启用扩展传输 = 有效配置.ex === 'yes';
+  传输路径 = 有效配置.tp || '';
+  订阅转换接口 = 有效配置.scu || 配置默认值.scu;
+  启用优选域名 = 有效配置.epd === 'yes';
+  启用优选地址 = 有效配置.epi === 'yes';
+  启用仓库优选 = 有效配置.egi === 'yes';
+  启用原生地址 = 有效配置.ena === 'yes';
+  启用家宽链式 = 有效配置.jk === 'yes';
+  启用加密客户端问候 = 有效配置.ech === 'yes';
+  自定义域名系统 = 有效配置.customDNS || 配置默认值.customDNS;
+  自定义加密客户端问候域名 = 有效配置.customECHDomain || 配置默认值.customECHDomain;
+  自定义应用层协议协商 = 规范化应用层协议协商(有效配置.alpn || '');
+  禁用非传输层安全 = 有效配置.dkby === 'yes' || 启用加密客户端问候;
+  const 降级控制值 = (有效配置.qj || '').toLowerCase();
+  启用代理降级 = 降级控制值 === 'no';
+  仅走代理 = 降级控制值 === 'only';
+  自定义路径 = 有效配置.d || '';
+  优选地址源 = 有效配置.yxURL || '';
+  回退地址 = 有效配置.p ? 有效配置.p.trim() : '';
+  代理5配置 = 有效配置.s || '';
+  if (代理5配置) {
+    try {
+      已解析代理5配置 = 解析代理配置(代理5配置);
+      是否代理已启用 = true;
+    } catch (错误31) {
+      是否代理已启用 = false;
+    }
+  } else {
+    已解析代理5配置 = {};
+    是否代理已启用 = false;
+  }
+  禁用优选 = !!(有效配置.yxby && 有效配置.yxby.toLowerCase() === 'yes');
+}
+function 更新自定义优选来源值() {
+  const 值值30 = 获取配置值('yx', '');
+  if (值值30) {
+    try {
+      const 优选列表 = 值值30.split(',').map(项目29 => 项目29.trim()).filter(项目28 => 项目28);
+      自定义优选地址列表 = [];
+      自定义优选域名列表 = [];
+      优选列表.forEach(项目27 => {
+        let 节点名称26 = '';
+        let 地址部分25 = 项目27;
+        if (项目27.includes('#')) {
+          const 部分列表24 = 项目27.split('#');
+          地址部分25 = 部分列表24[0].trim();
+          节点名称26 = 部分列表24[1].trim();
+        }
+        const {
+          address: 地址23,
+          port: 端口22
+        } = 解析地址值端口(地址部分25);
+        if (!节点名称26) {
+          节点名称26 = '自定义优选-' + 地址23 + (端口22 ? ':' + 端口22 : '');
+        }
+        if (是否有效地址(地址23)) {
+          自定义优选地址列表.push({
+            ip: 地址23,
+            port: 端口22,
+            isp: 节点名称26
+          });
+        } else {
+          自定义优选域名列表.push({
+            domain: 地址23,
+            port: 端口22,
+            name: 节点名称26
+          });
+        }
+      });
+    } catch (错误) {
+      自定义优选地址列表 = [];
+      自定义优选域名列表 = [];
+    }
+  } else {
+    自定义优选地址列表 = [];
+    自定义优选域名列表 = [];
+  }
+}
+function 解析值值数组(值值) {
+  if (!值值 || !值值.trim()) return [];
+  const 项目列表 = 值值.split(',').map(项目21 => 项目21.trim()).filter(项目20 => 项目20);
+  const 结果 = [];
+  for (const 项目19 of 项目列表) {
+    let 节点名称 = '';
+    let 地址部分 = 项目19;
+    if (项目19.includes('#')) {
+      const 部分列表 = 项目19.split('#');
+      地址部分 = 部分列表[0].trim();
+      节点名称 = 部分列表[1].trim();
+    }
+    const {
+      address: 地址,
+      port: 端口18
+    } = 解析地址值端口(地址部分);
+    if (!节点名称) {
+      节点名称 = 地址 + (端口18 ? ':' + 端口18 : '');
+    }
+    结果.push({
+      ip: 地址,
+      port: 端口18 || 443,
+      name: 节点名称,
+      addedAt: new Date().toISOString()
+    });
+  }
+  return 结果;
+}
+function 处理数组值值(数组) {
+  if (!数组 || 数组.length === 0) return '';
+  return 数组.map(项目 => {
+    const 端口17 = 项目.port || 443;
+    return `${项目.ip}:${端口17}#${项目.name}`;
+  }).join(',');
+}
+function 是否有效域名(域名) {
+  const 域名正则 = /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+  return 域名正则.test(域名);
+}
+async function 解析文本值数组(内容) {
+  var 已处理 = 内容.replace(/[	"'\r\n]+/g, ',').replace(/,+/g, ',');
+  if (已处理.charAt(0) == ',') 已处理 = 已处理.slice(1);
+  if (已处理.charAt(已处理.length - 1) == ',') 已处理 = 已处理.slice(0, 已处理.length - 1);
+  return 已处理.split(',');
+}
+async function 获取优选接口(网址列表, 默认端口 = '443', 超时 = 3000) {
+  if (!网址列表?.length) return [];
+  const 结果列表 = new Set();
+  await Promise.allSettled(网址列表.map(async 网址 => {
+    try {
+      const 控制器 = new AbortController();
+      const 超时标识 = setTimeout(() => 控制器.abort(), 超时);
+      const 响应 = await fetch(网址, {
+        signal: 控制器.signal
+      });
+      clearTimeout(超时标识);
+      let 文本 = '';
+      try {
+        const 缓冲 = await 响应.arrayBuffer();
+        const 内容类型 = (响应.headers.get('content-type') || '').toLowerCase();
+        const 字符集 = 内容类型.match(/charset=([^\s;]+)/i)?.[1]?.toLowerCase() || '';
+        let 解码器列表 = ['utf-8', 'gb2312'];
+        if (字符集.includes('gb') || 字符集.includes('gbk') || 字符集.includes('gb2312')) {
+          解码器列表 = ['gb2312', 'utf-8'];
+        }
+        let 解码成功 = false;
+        for (const 解码器 of 解码器列表) {
+          try {
+            const 已解码 = new TextDecoder(解码器).decode(缓冲);
+            if (已解码 && 已解码.length > 0 && !已解码.includes('\ufffd')) {
+              文本 = 已解码;
+              解码成功 = true;
+              break;
+            } else if (已解码 && 已解码.length > 0) {
+              continue;
+            }
+          } catch (事件值16) {
+            continue;
+          }
+        }
+        if (!解码成功) {
+          文本 = await 响应.text();
+        }
+        if (!文本 || 文本.trim().length === 0) {
+          return;
+        }
+      } catch (事件值15) {
+        return;
+      }
+      const 行列表 = 文本.trim().split('\n').map(行值14 => 行值14.trim()).filter(行值 => 行值);
+      const 是否值 = 行列表.length > 1 && 行列表[0].includes(',');
+      const 六版地址模式 = /^[^\[\]]*:[^\[\]]*:[^\[\]]/;
+      if (!是否值) {
+        行列表.forEach(行13 => {
+          const 井号索引 = 行13.indexOf('#');
+          const [主机部分, 备注] = 井号索引 > -1 ? [行13.substring(0, 井号索引), 行13.substring(井号索引)] : [行13, ''];
+          let 是否有端口 = false;
+          if (主机部分.startsWith('[')) {
+            是否有端口 = /\]:(\d+)$/.test(主机部分);
+          } else {
+            const 值索引 = 主机部分.lastIndexOf(':');
+            是否有端口 = 值索引 > -1 && /^\d+$/.test(主机部分.substring(值索引 + 1));
+          }
+          const 端口12 = new URL(网址).searchParams.get('port') || 默认端口;
+          结果列表.add(是否有端口 ? 行13 : `${主机部分}:${端口12}${备注}`);
+        });
+      } else {
+        const 头部列表 = 行列表[0].split(',').map(头值11 => 头值11.trim());
+        const 数据行列表 = 行列表.slice(1);
+        if (头部列表.includes('IP地址') && 头部列表.includes('端口') && 头部列表.includes('数据中心')) {
+          const 地址索引10 = 头部列表.indexOf('IP地址'),
+            端口索引 = 头部列表.indexOf('端口');
+          const 备注索引 = 头部列表.indexOf('国家') > -1 ? 头部列表.indexOf('国家') : 头部列表.indexOf('城市') > -1 ? 头部列表.indexOf('城市') : 头部列表.indexOf('数据中心');
+          const 传输层安全索引 = 头部列表.indexOf('TLS');
+          数据行列表.forEach(行9 => {
+            const 列列表8 = 行9.split(',').map(丙值7 => 丙值7.trim());
+            if (传输层安全索引 !== -1 && 列列表8[传输层安全索引]?.toLowerCase() !== 'true') return;
+            const 包裹地址6 = 六版地址模式.test(列列表8[地址索引10]) ? `[${列列表8[地址索引10]}]` : 列列表8[地址索引10];
+            结果列表.add(`${包裹地址6}:${列列表8[端口索引]}#${列列表8[备注索引]}`);
+          });
+        } else if (头部列表.some(头值5 => 头值5.includes('IP')) && 头部列表.some(头值4 => 头值4.includes('延迟')) && 头部列表.some(头值3 => 头值3.includes('下载速度'))) {
+          const 地址索引 = 头部列表.findIndex(头值2 => 头值2.includes('IP'));
+          const 延迟索引 = 头部列表.findIndex(头值1 => 头值1.includes('延迟'));
+          const 速度索引 = 头部列表.findIndex(头值 => 头值.includes('下载速度'));
+          const 端口 = new URL(网址).searchParams.get('port') || 默认端口;
+          数据行列表.forEach(行 => {
+            const 列列表 = 行.split(',').map(丙值 => 丙值.trim());
+            const 包裹地址 = 六版地址模式.test(列列表[地址索引]) ? `[${列列表[地址索引]}]` : 列列表[地址索引];
+            结果列表.add(`${包裹地址}:${端口}#CF优选 ${列列表[延迟索引]}ms ${列列表[速度索引]}MB/s`);
+          });
+        }
+      }
+    } catch (事件值) {}
+  }));
+  return Array.from(结果列表);
+}

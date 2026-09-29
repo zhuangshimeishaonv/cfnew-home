@@ -1,0 +1,1402 @@
+084 = document.getElementById('et'),
+      值值20083 = document.getElementById('ex');
+    if (值值20085 && 值值20084 && 值值20083 && !值值20085.checked && !值值20084.checked && !值值20083.checked) {
+      显示操作状态('${是否值236 ? 解码64('2K3Yr9in2YLZhCDbjNqpINm+2LHZiNiq2qnZhCDYsdinINmB2LnYp9mEINqp2YbbjNivIQ==') : 解码64('6Iez5bCR6ZyA6KaB5ZCv55So5LiA5Liq5Y2P6K6u77yB')}', 'err');
+      显示提示('${是否值236 ? 解码64('2K3Yr9in2YLZhCDbjNqpINm+2LHZiNiq2qnZhCDYsdinINmB2LnYp9mEINqp2YbbjNivIQ==') : 解码64('6Iez5bCR6ZyA6KaB5ZCv55So5LiA5Liq5Y2P6K6u77yB')}', 'warn');
+      return;
+    }
+    const 本地值20082 = document.getElementById('cpBtnSaveAll');
+    if (本地值20082) {
+      本地值20082.classList.add('cp-action-btn-saving');
+      本地值20082.disabled = true;
+    }
+    try {
+      await 保存配置(收集全部配置());
+    } finally {
+      if (本地值20082) {
+        本地值20082.classList.remove('cp-action-btn-saving');
+        本地值20082.disabled = false;
+      }
+    }
+  }
+  window.保存全部配置 = 保存全部配置;
+  function 显示操作状态(消息, 类型) {
+    const 本地值20081 = document.getElementById('cpActionStatus');
+    if (!本地值20081) return;
+    本地值20081.textContent = 消息;
+    本地值20081.classList.toggle('cp-err', 类型 === 'err');
+    本地值20081.classList.add('cp-show');
+    clearTimeout(显示操作状态._t);
+    显示操作状态._t = setTimeout(function () {
+      本地值20081.classList.remove('cp-show');
+    }, 2400);
+  }
+  window.显示操作状态 = 显示操作状态;
+
+  // 绑定底部统一操作条
+  const 值操作值 = document.getElementById('cpActionBar');
+  const 值值保存值 = document.getElementById('cpBtnSaveAll');
+  if (值值保存值) 值值保存值.addEventListener('click', async function () {
+    值值保存值.classList.add('cp-action-btn-saving');
+    try {
+      await 保存全部配置();
+      if (值操作值) 值操作值.classList.remove('cp-dirty');
+    } finally {
+      值值保存值.classList.remove('cp-action-btn-saving');
+    }
+  });
+  const 值值值20080 = document.getElementById('cpBtnRefresh');
+  if (值值值20080) 值值值20080.addEventListener('click', async function () {
+    值值值20080.classList.add('cp-action-btn-saving');
+    try {
+      await 加载当前配置();
+      if (值操作值) 值操作值.classList.remove('cp-dirty');
+      显示操作状态('${是否值236 ? 'تنظیمات تازه‌سازی شد' : '配置已刷新'}');
+    } finally {
+      值值值20080.classList.remove('cp-action-btn-saving');
+    }
+  });
+  const 值值重置 = document.getElementById('cpBtnReset');
+  if (值值重置) 值值重置.addEventListener('click', 重置全部配置);
+
+  // 修改字段时把 FAB 标记为 "未保存"
+  function 标记已修改() {
+    if (值操作值) 值操作值.classList.add('cp-dirty');
+  }
+  const 已修改范围 = document.getElementById('configContent') || document;
+  ['input', 'change'].forEach(function (本地值20079) {
+    已修改范围.addEventListener(本地值20079, function (事件值20078) {
+      const 本地值20077 = 事件值20078.target;
+      if (!本地值20077 || !本地值20077.tagName) return;
+      const 本地值20076 = 本地值20077.tagName.toLowerCase();
+      if (本地值20076 === 'input' || 本地值20076 === 'select' || 本地值20076 === 'textarea') {
+        // 跳过延迟测试相关输入，避免误触
+        if (本地值20077.id && /^(latencyTestInput|fetchURLInput|latencyTestPort|randomIPCount|testThreads|ipSourceSelect)$/.test(本地值20077.id)) return;
+        标记已修改();
+      }
+    });
+  });
+
+  // Ctrl+S / Cmd+S 触发保存
+  window.addEventListener('keydown', function (事件值20075) {
+    if ((事件值20075.ctrlKey || 事件值20075.metaKey) && (事件值20075.key === 's' || 事件值20075.key === 'S')) {
+      事件值20075.preventDefault();
+      if (值值保存值 && !值值保存值.classList.contains('cp-action-btn-saving')) {
+        值值保存值.click();
+      }
+    }
+  });
+  let 测试值控制器 = null;
+  let 测试结果列表 = [];
+  const 开始测试值 = document.getElementById('startLatencyTest');
+  const 值测试值 = document.getElementById('stopLatencyTest');
+  const 测试状态 = document.getElementById('latencyTestStatus');
+  const 测试结果列表值 = document.getElementById('latencyTestResults');
+  const 结果列表列表 = document.getElementById('latencyResultsList');
+  const 覆盖已选值 = document.getElementById('overwriteSelectedToYx');
+  const 追加已选值 = document.getElementById('appendSelectedToYx');
+  const 选择值值 = document.getElementById('selectAllResults');
+  const 值值值 = document.getElementById('deselectAllResults');
+  const 地址源选择 = document.getElementById('ipSourceSelect');
+  const 手动输入值 = document.getElementById('manualInputDiv');
+  const 网址获取值 = document.getElementById('urlFetchDiv');
+  const 延迟测试输入 = document.getElementById('latencyTestInput');
+  const 获取网址输入 = document.getElementById('fetchURLInput');
+  const 延迟测试端口 = document.getElementById('latencyTestPort');
+  const 随机地址数量 = document.getElementById('randomIPCount');
+  const 云墙随机值 = document.getElementById('cfRandomDiv');
+  const 随机数量值 = document.getElementById('randomCountDiv');
+  const 生成云墙地址值 = document.getElementById('generateCFIPBtn');
+  const 获取地址值 = document.getElementById('fetchIPBtn');
+  if (延迟测试输入) {
+    const 已保存测试输入 = localStorage.getItem('latencyTestInput');
+    if (已保存测试输入) 延迟测试输入.value = 已保存测试输入;
+    延迟测试输入.addEventListener('input', function () {
+      localStorage.setItem('latencyTestInput', this.value);
+    });
+  }
+  if (获取网址输入) {
+    const 已保存获取网址 = localStorage.getItem('fetchURLInput');
+    if (已保存获取网址) 获取网址输入.value = 已保存获取网址;
+    获取网址输入.addEventListener('input', function () {
+      localStorage.setItem('fetchURLInput', this.value);
+    });
+  }
+  if (延迟测试端口) {
+    const 已保存端口 = localStorage.getItem('latencyTestPort');
+    if (已保存端口) 延迟测试端口.value = 已保存端口;
+    延迟测试端口.addEventListener('input', function () {
+      localStorage.setItem('latencyTestPort', this.value);
+    });
+  }
+  if (随机地址数量) {
+    const 已保存数量 = localStorage.getItem('randomIPCount');
+    if (已保存数量) 随机地址数量.value = 已保存数量;
+    随机地址数量.addEventListener('input', function () {
+      localStorage.setItem('randomIPCount', this.value);
+    });
+    // 初始化时，如果默认是隐藏的，则禁用输入框
+    if (随机数量值 && 随机数量值.style.display === 'none') {
+      随机地址数量.disabled = true;
+    }
+  }
+  const 测试线程数输入 = document.getElementById('testThreads');
+  if (测试线程数输入) {
+    const 已保存线程数 = localStorage.getItem('testThreads');
+    if (已保存线程数) 测试线程数输入.value = 已保存线程数;
+    测试线程数输入.addEventListener('input', function () {
+      localStorage.setItem('testThreads', this.value);
+    });
+  }
+  if (地址源选择) {
+    const 已保存源 = localStorage.getItem('ipSourceSelect');
+    const 当前源 = 已保存源 || 地址源选择.value || 'manual';
+    if (已保存源) {
+      地址源选择.value = 已保存源;
+    }
+    手动输入值.style.display = 当前源 === 'manual' ? 'block' : 'none';
+    网址获取值.style.display = 当前源 === 'urlFetch' ? 'block' : 'none';
+    云墙随机值.style.display = 当前源 === 'cfRandom' ? 'block' : 'none';
+    随机数量值.style.display = 当前源 === 'cfRandom' ? 'block' : 'none';
+    // 当隐藏时禁用输入框，避免表单验证错误
+    if (随机地址数量) {
+      随机地址数量.disabled = 当前源 !== 'cfRandom';
+    }
+  }
+  const 云墙网段列表 = ['173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22', '103.31.4.0/22', '141.101.64.0/18', '108.162.192.0/18', '190.93.240.0/20', '188.114.96.0/20', '197.234.240.0/22', '198.41.128.0/17', '162.158.0.0/15', '104.16.0.0/13', '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22'];
+  function 从网段生成随机地址(网段20074) {
+    const [基础地址, 前缀长度] = 网段20074.split('/');
+    const 前缀 = parseInt(前缀长度);
+    const 主机值 = 32 - 前缀;
+    const 地址部分列表 = 基础地址.split('.').map(参数值20073 => parseInt(参数值20073));
+    const 地址值 = 地址部分列表[0] << 24 | 地址部分列表[1] << 16 | 地址部分列表[2] << 8 | 地址部分列表[3];
+    const 随机偏移 = Math.floor(Math.random() * Math.pow(2, 主机值));
+    const 掩码 = 0xFFFFFFFF << 主机值 >>> 0;
+    const 随机地址 = ((地址值 & 掩码) >>> 0) + 随机偏移 >>> 0;
+    return [随机地址 >>> 24 & 0xFF, 随机地址 >>> 16 & 0xFF, 随机地址 >>> 8 & 0xFF, 随机地址 & 0xFF].join('.');
+  }
+  function 生成云墙随机地址(数量20072, 端口20071) {
+    const 地址列表20070 = [];
+    for (let 索引值20069 = 0; 索引值20069 < 数量20072; 索引值20069++) {
+      const 网段 = 云墙网段列表[Math.floor(Math.random() * 云墙网段列表.length)];
+      const 地址20068 = 从网段生成随机地址(网段);
+      地址列表20070.push(地址20068 + ':' + 端口20071);
+    }
+    return 地址列表20070;
+  }
+  if (地址源选择) {
+    地址源选择.addEventListener('change', function () {
+      const 值 = this.value;
+      localStorage.setItem('ipSourceSelect', 值);
+      手动输入值.style.display = 值 === 'manual' ? 'block' : 'none';
+      网址获取值.style.display = 值 === 'urlFetch' ? 'block' : 'none';
+      云墙随机值.style.display = 值 === 'cfRandom' ? 'block' : 'none';
+      随机数量值.style.display = 值 === 'cfRandom' ? 'block' : 'none';
+      // 当隐藏时禁用输入框，避免表单验证错误
+      if (随机地址数量) {
+        随机地址数量.disabled = 值 !== 'cfRandom';
+      }
+    });
+  }
+  if (生成云墙地址值) {
+    生成云墙地址值.addEventListener('click', function () {
+      const 数量 = parseInt(document.getElementById('randomIPCount').value) || 20;
+      const 端口20067 = document.getElementById('latencyTestPort').value || '443';
+      const 地址列表 = 生成云墙随机地址(数量, 端口20067);
+      document.getElementById('latencyTestInput').value = 地址列表.join(',');
+      手动输入值.style.display = 'block';
+      显示状态('${是否值236 ? 'تولید شد' : '已生成'} ' + 数量 + ' ${是否值236 ? 'IP تصادفی CF' : '个CF随机IP'}', 'success');
+    });
+  }
+  if (获取地址值) {
+    获取地址值.addEventListener('click', async function () {
+      const 网址输入 = document.getElementById('fetchURLInput');
+      const 获取网址 = 网址输入.value.trim();
+      if (!获取网址) {
+        显示提示('${是否值236 ? 'لطفا URL را وارد کنید' : '请输入URL'}', 'warn');
+        return;
+      }
+      获取地址值.disabled = true;
+      获取地址值.textContent = '${是否值236 ? 'در حال دریافت...' : '获取中...'}';
+      try {
+        // 支持多个 URL（逗号分隔）以及返回内容中逗号分隔的多个 IP/节点
+        const 网址列表 = Array.from(new Set(获取网址.split(',').map(网址值20066 => 网址值20066.trim()).filter(网址值20065 => 网址值20065)));
+        const 值项目列表 = [];
+        for (const 网址值 of 网址列表) {
+          const 响应 = await fetch(网址值);
+          if (!响应.ok) {
+            throw new Error('HTTP ' + 响应.status + ' @ ' + 网址值);
+          }
+          const 文本20064 = await 响应.text();
+
+          // 先按行分割，再在每行内按逗号分割，兼容“多行 + 逗号分隔”两种格式
+          const 值网址项目列表 = 文本20064.split(/\\r?\\n/).map(行值20063 => 行值20063.trim()).filter(行值20062 => 行值20062 && !行值20062.startsWith('#')).flatMap(行值 => 行值.split(',').map(参数值20061 => 参数值20061.trim()).filter(参数值 => 参数值));
+          值项目列表.push(...值网址项目列表);
+        }
+        if (值项目列表.length > 0) {
+          document.getElementById('latencyTestInput').value = 值项目列表.join(',');
+          手动输入值.style.display = 'block';
+          显示状态('${是否值236 ? 'دریافت شد' : '已获取'} ' + 值项目列表.length + ' ${是否值236 ? 'IP' : '个IP'}', 'success');
+        } else {
+          显示状态('${是否值236 ? 'داده‌ای یافت نشد' : '未获取到数据'}', 'error');
+        }
+      } catch (错误20060) {
+        显示状态('${是否值236 ? 'خطا در دریافت' : '获取失败'}: ' + 错误20060.message, 'error');
+      } finally {
+        获取地址值.disabled = false;
+        获取地址值.textContent = '⬇ ${是否值236 ? 'دریافت IP' : '获取IP'}';
+      }
+    });
+  }
+  if (开始测试值) {
+    开始测试值.addEventListener('click', async function () {
+      const 输入值20059 = document.getElementById('latencyTestInput');
+      const 端口值 = document.getElementById('latencyTestPort');
+      const 线程数值 = document.getElementById('testThreads');
+      const 输入值 = 输入值20059.value.trim();
+      const 默认端口 = 端口值.value || '443';
+      const 线程数 = parseInt(线程数值.value) || 5;
+      if (!输入值) {
+        显示状态('${是否值236 ? 'لطفا IP یا دامنه وارد کنید' : '请输入IP或域名'}', 'error');
+        return;
+      }
+      const 本地值20058 = 输入值.split(',').map(翻译值20057 => 翻译值20057.trim()).filter(翻译值20056 => 翻译值20056);
+      if (本地值20058.length === 0) return;
+      开始测试值.style.display = 'none';
+      值测试值.style.display = 'inline-block';
+      测试状态.style.display = 'block';
+      测试结果列表值.style.display = 'block';
+      结果列表列表.innerHTML = '';
+      测试结果列表 = [];
+      if (城市筛选值) {
+        城市筛选值.style.display = 'none';
+      }
+      测试值控制器 = new AbortController();
+      let 本地值20055 = 0;
+      const 本地值20054 = 本地值20058.length;
+      function 解析目标(目标20053) {
+        let 主机20052 = 目标20053;
+        let 端口20051 = 默认端口;
+        let 节点名称20050 = '';
+        if (目标20053.includes('#')) {
+          const 部分列表20049 = 目标20053.split('#');
+          节点名称20050 = 部分列表20049[1] || '';
+          主机20052 = 部分列表20049[0];
+        }
+        if (主机20052.includes(':') && !主机20052.startsWith('[')) {
+          const 值值20048 = 主机20052.lastIndexOf(':');
+          const 值端口 = 主机20052.substring(值值20048 + 1);
+          if (/^[0-9]+$/.test(值端口)) {
+            端口20051 = 值端口;
+            主机20052 = 主机20052.substring(0, 值值20048);
+          }
+        } else if (主机20052.includes(']:')) {
+          const 部分列表20047 = 主机20052.split(']:');
+          主机20052 = 部分列表20047[0] + ']';
+          端口20051 = 部分列表20047[1];
+        }
+        return {
+          host: 主机20052,
+          port: 端口20051,
+          nodeName: 节点名称20050
+        };
+      }
+      function 渲染结果(结果20046, 索引20045, 值值20044 = true) {
+        // 只展示在线优选成功的结果，失败/超时的不再显示
+        if (!结果20046.success) {
+          return null;
+        }
+        const 结果项目 = document.createElement('div');
+        结果项目.style.cssText = 'display: flex; align-items: center; padding: 8px; border-bottom: 1px solid #003300; gap: 10px;';
+        结果项目.dataset.index = 索引20045;
+        结果项目.dataset.colo = 结果20046.colo || '';
+        if (!值值20044) {
+          结果项目.style.display = 'none';
+        }
+        const 复选框20043 = document.createElement('input');
+        复选框20043.type = 'checkbox';
+        复选框20043.checked = true;
+        复选框20043.disabled = false;
+        复选框20043.dataset.index = 索引20045;
+        复选框20043.style.cssText = 'width: 18px; height: 18px; cursor: pointer;';
+        const 本地值20042 = document.createElement('div');
+        本地值20042.style.cssText = 'flex: 1; font-family: monospace; font-size: 13px;';
+        const 机房名称20041 = 结果20046.colo ? 获取机房名称(结果20046.colo) : '';
+        const 机房显示 = 机房名称20041 ? ' <span style="color: #00aaff;">[' + 机房名称20041 + ']</span>' : '';
+        本地值20042.innerHTML = '<span style="color: #00f0ff;">' + 结果20046.host + ':' + 结果20046.port + '</span>' + 机房显示 + ' <span style="color: #ffff00;">' + 结果20046.latency + 'ms</span>';
+        结果项目.appendChild(复选框20043);
+        结果项目.appendChild(本地值20042);
+        结果列表列表.appendChild(结果项目);
+        return 结果项目;
+      }
+      async function 测试单项(目标) {
+        if (测试值控制器.signal.aborted) return null;
+        const {
+          host: 主机20040,
+          port: 端口20039,
+          nodeName: 节点名称
+        } = 解析目标(目标);
+        const 结果20038 = await 测试延迟(主机20040, 端口20039, 测试值控制器.signal);
+        结果20038.host = 主机20040;
+        结果20038.port = 端口20039;
+        结果20038.nodeName = 结果20038.success && 结果20038.colo ? 节点名称 || 'CF-' + 结果20038.colo : 节点名称 || 主机20040;
+        return 结果20038;
+      }
+      for (let 索引值20037 = 0; 索引值20037 < 本地值20054; 索引值20037 += 线程数) {
+        if (测试值控制器.signal.aborted) break;
+        const 本地值20036 = 本地值20058.slice(索引值20037, Math.min(索引值20037 + 线程数, 本地值20054));
+        测试状态.textContent = '${是否值236 ? 'در حال تست' : '测试中'}: ' + (索引值20037 + 1) + '-' + Math.min(索引值20037 + 线程数, 本地值20054) + '/' + 本地值20054 + ' (${是否值236 ? 'رشته‌ها' : '线程'}: ' + 线程数 + ')';
+        const 结果列表 = await Promise.all(本地值20036.map(翻译值 => 测试单项(翻译值)));
+        for (const 结果20035 of 结果列表) {
+          if (结果20035) {
+            const 索引20034 = 测试结果列表.length;
+            测试结果列表.push(结果20035);
+            渲染结果(结果20035, 索引20034);
+            本地值20055++;
+          }
+        }
+      }
+      测试状态.textContent = '${是否值236 ? 'تست کامل شد' : '测试完成'}: ' + 本地值20055 + '/' + 本地值20054;
+      开始测试值.style.display = 'inline-block';
+      值测试值.style.display = 'none';
+
+      // 更新城市选择器
+      更新城市筛选();
+    });
+  }
+  if (值测试值) {
+    值测试值.addEventListener('click', function () {
+      if (测试值控制器) {
+        测试值控制器.abort();
+      }
+      开始测试值.style.display = 'inline-block';
+      值测试值.style.display = 'none';
+      测试状态.textContent = '${是否值236 ? 'تست متوقف شد' : '测试已停止'}';
+    });
+  }
+  if (选择值值) {
+    选择值值.addEventListener('click', function () {
+      const 本地值20033 = 结果列表列表.querySelectorAll('input[type="checkbox"]:not(:disabled)');
+      本地值20033.forEach(本地值20032 => 本地值20032.checked = true);
+    });
+  }
+  if (值值值) {
+    值值值.addEventListener('click', function () {
+      const 本地值20031 = 结果列表列表.querySelectorAll('input[type="checkbox"]');
+      本地值20031.forEach(本地值20030 => 本地值20030.checked = false);
+    });
+  }
+
+  // 获取选中项的通用函数
+  function 获取已选项目() {
+    const 本地值20029 = 结果列表列表.querySelectorAll('input[type="checkbox"]:checked');
+    if (本地值20029.length === 0) {
+      显示状态('${是否值236 ? 'لطفا حداقل یک مورد انتخاب کنید' : '请至少选择一项'}', 'error');
+      return null;
+    }
+    const 已选项目列表20028 = [];
+    本地值20029.forEach(本地值20027 => {
+      const 索引20026 = parseInt(本地值20027.dataset.index);
+      const 结果20025 = 测试结果列表[索引20026];
+      if (结果20025 && 结果20025.success) {
+        const 机房名称 = 结果20025.colo ? 获取机房名称(结果20025.colo) : 结果20025.nodeName;
+        const 项目字符串 = 结果20025.host + ':' + 结果20025.port + '#' + 机房名称;
+        已选项目列表20028.push(项目字符串);
+      }
+    });
+    return 已选项目列表20028;
+  }
+
+  // 覆盖添加
+  if (覆盖已选值) {
+    覆盖已选值.addEventListener('click', async function () {
+      const 已选项目列表20024 = 获取已选项目();
+      if (!已选项目列表20024 || 已选项目列表20024.length === 0) return;
+      const 值输入20023 = document.getElementById('yx');
+      const 新值20022 = 已选项目列表20024.join(',');
+      值输入20023.value = 新值20022;
+      覆盖已选值.disabled = true;
+      追加已选值.disabled = true;
+      覆盖已选值.textContent = '${是否值236 ? 'در حال ذخیره...' : '保存中...'}';
+      try {
+        const 配置数据20021 = {
+          customIP: document.getElementById('customIP').value,
+          yx: 新值20022,
+          yxURL: document.getElementById('yxURL').value,
+          s: document.getElementById('socksConfig').value
+        };
+        await 保存配置(配置数据20021);
+        显示状态('${是否值236 ? 'موفقیت‌آمیز بود' : '已覆盖'} ' + 已选项目列表20024.length + ' ${是否值236 ? 'مورد و ذخیره شد' : '项并已保存'}', 'success');
+      } catch (错误20020) {
+        显示状态('${是否值236 ? 'خطا در ذخیره' : '保存失败'}: ' + 错误20020.message, 'error');
+      } finally {
+        覆盖已选值.disabled = false;
+        追加已选值.disabled = false;
+        覆盖已选值.textContent = '${是否值236 ? '覆盖添加' : '覆盖添加'}';
+      }
+    });
+  }
+
+  // 追加添加
+  if (追加已选值) {
+    追加已选值.addEventListener('click', async function () {
+      const 已选项目列表 = 获取已选项目();
+      if (!已选项目列表 || 已选项目列表.length === 0) return;
+      const 值输入 = document.getElementById('yx');
+      const 当前值 = 值输入.value.trim();
+      const 新项目列表 = 已选项目列表.join(',');
+      const 新值 = 当前值 ? 当前值 + ',' + 新项目列表 : 新项目列表;
+      值输入.value = 新值;
+      覆盖已选值.disabled = true;
+      追加已选值.disabled = true;
+      追加已选值.textContent = '${是否值236 ? 'در حال ذخیره...' : '保存中...'}';
+      try {
+        const 配置数据 = {
+          customIP: document.getElementById('customIP').value,
+          yx: 新值,
+          yxURL: document.getElementById('yxURL').value,
+          s: document.getElementById('socksConfig').value
+        };
+        await 保存配置(配置数据);
+        显示状态('${是否值236 ? 'موفقیت‌آمیز بود' : '已追加'} ' + 已选项目列表.length + ' ${是否值236 ? 'مورد و ذخیره شد' : '项并已保存'}', 'success');
+      } catch (错误20019) {
+        显示状态('${是否值236 ? 'خطا در ذخیره' : '保存失败'}: ' + 错误20019.message, 'error');
+      } finally {
+        覆盖已选值.disabled = false;
+        追加已选值.disabled = false;
+        追加已选值.textContent = '${是否值236 ? '追加添加' : '追加添加'}';
+      }
+    });
+  }
+  function 地址转十六进制(地址) {
+    const 部分列表 = 地址.split('.');
+    if (部分列表.length !== 4) return null;
+    let 十六进制 = '';
+    for (let 索引值 = 0; 索引值 < 4; 索引值++) {
+      const 数字 = parseInt(部分列表[索引值]);
+      if (isNaN(数字) || 数字 < 0 || 数字 > 255) return null;
+      十六进制 += 数字.toString(16).padStart(2, '0');
+    }
+    return 十六进制;
+  }
+  const 机房映射 = {
+    'SJC': '🇺🇸 圣何塞',
+    'LAX': '🇺🇸 洛杉矶',
+    'SEA': '🇺🇸 西雅图',
+    'SFO': '🇺🇸 旧金山',
+    'DFW': '🇺🇸 达拉斯',
+    'ORD': '🇺🇸 芝加哥',
+    'IAD': '🇺🇸 华盛顿',
+    'ATL': '🇺🇸 亚特兰大',
+    'MIA': '🇺🇸 迈阿密',
+    'DEN': '🇺🇸 丹佛',
+    'PHX': '🇺🇸 凤凰城',
+    'BOS': '🇺🇸 波士顿',
+    'EWR': '🇺🇸 纽瓦克',
+    'JFK': '🇺🇸 纽约',
+    'LAS': '🇺🇸 拉斯维加斯',
+    'MSP': '🇺🇸 明尼阿波利斯',
+    'DTW': '🇺🇸 底特律',
+    'PHL': '🇺🇸 费城',
+    'CLT': '🇺🇸 夏洛特',
+    'SLC': '🇺🇸 盐湖城',
+    'PDX': '🇺🇸 波特兰',
+    'SAN': '🇺🇸 圣地亚哥',
+    'TPA': '🇺🇸 坦帕',
+    'IAH': '🇺🇸 休斯顿',
+    'MCO': '🇺🇸 奥兰多',
+    'AUS': '🇺🇸 奥斯汀',
+    'BNA': '🇺🇸 纳什维尔',
+    'RDU': '🇺🇸 罗利',
+    'IND': '🇺🇸 印第安纳波利斯',
+    'CMH': '🇺🇸 哥伦布',
+    'MCI': '🇺🇸 堪萨斯城',
+    'OMA': '🇺🇸 奥马哈',
+    'ABQ': '🇺🇸 阿尔伯克基',
+    'OKC': '🇺🇸 俄克拉荷马城',
+    'MEM': '🇺🇸 孟菲斯',
+    'JAX': '🇺🇸 杰克逊维尔',
+    'RIC': '🇺🇸 里士满',
+    'BUF': '🇺🇸 布法罗',
+    'PIT': '🇺🇸 匹兹堡',
+    'CLE': '🇺🇸 克利夫兰',
+    'CVG': '🇺🇸 辛辛那提',
+    'MKE': '🇺🇸 密尔沃基',
+    'STL': '🇺🇸 圣路易斯',
+    'SAT': '🇺🇸 圣安东尼奥',
+    'HNL': '🇺🇸 檀香山',
+    'ANC': '🇺🇸 安克雷奇',
+    'SMF': '🇺🇸 萨克拉门托',
+    'ONT': '🇺🇸 安大略',
+    'OAK': '🇺🇸 奥克兰',
+    'HKG': '🇭🇰 香港',
+    'TPE': '🇹🇼 台北',
+    'TSA': '🇹🇼 台北松山',
+    'KHH': '🇹🇼 高雄',
+    'NRT': '🇯🇵 东京成田',
+    'HND': '🇯🇵 东京羽田',
+    'KIX': '🇯🇵 大阪关西',
+    'ITM': '🇯🇵 大阪伊丹',
+    'NGO': '🇯🇵 名古屋',
+    'FUK': '🇯🇵 福冈',
+    'CTS': '🇯🇵 札幌',
+    'OKA': '🇯🇵 冲绳',
+    'ICN': '🇰🇷 首尔仁川',
+    'GMP': '🇰🇷 首尔金浦',
+    'PUS': '🇰🇷 釜山',
+    'SIN': '🇸🇬 新加坡',
+    'BKK': '🇹🇭 曼谷',
+    'DMK': '🇹🇭 曼谷廊曼',
+    'KUL': '🇲🇾 吉隆坡',
+    'CGK': '🇮🇩 雅加达',
+    'MNL': '🇵🇭 马尼拉',
+    'CEB': '🇵🇭 宿务',
+    'HAN': '🇻🇳 河内',
+    'SGN': '🇻🇳 胡志明',
+    'DAD': '🇻🇳 岘港',
+    'RGN': '🇲🇲 仰光',
+    'PNH': '🇰🇭 金边',
+    'REP': '🇰🇭 暹粒',
+    'VTE': '🇱🇦 万象',
+    'BOM': '🇮🇳 孟买',
+    'DEL': '🇮🇳 新德里',
+    'MAA': '🇮🇳 金奈',
+    'BLR': '🇮🇳 班加罗尔',
+    'CCU': '🇮🇳 加尔各答',
+    'HYD': '🇮🇳 海得拉巴',
+    'AMD': '🇮🇳 艾哈迈达巴德',
+    'COK': '🇮🇳 科钦',
+    'PNQ': '🇮🇳 浦那',
+    'GOI': '🇮🇳 果阿',
+    'CMB': '🇱🇰 科伦坡',
+    'DAC': '🇧🇩 达卡',
+    'KTM': '🇳🇵 加德满都',
+    'ISB': '🇵🇰 伊斯兰堡',
+    'KHI': '🇵🇰 卡拉奇',
+    'LHE': '🇵🇰 拉合尔',
+    'LHR': '🇬🇧 伦敦希思罗',
+    'LGW': '🇬🇧 伦敦盖特威克',
+    'STN': '🇬🇧 伦敦斯坦斯特德',
+    'LTN': '🇬🇧 伦敦卢顿',
+    'MAN': '🇬🇧 曼彻斯特',
+    'EDI': '🇬🇧 爱丁堡',
+    'BHX': '🇬🇧 伯明翰',
+    'CDG': '🇫🇷 巴黎戴高乐',
+    'ORY': '🇫🇷 巴黎奥利',
+    'MRS': '🇫🇷 马赛',
+    'LYS': '🇫🇷 里昂',
+    'NCE': '🇫🇷 尼斯',
+    'FRA': '🇩🇪 法兰克福',
+    'MUC': '🇩🇪 慕尼黑',
+    'TXL': '🇩🇪 柏林',
+    'BER': '🇩🇪 柏林勃兰登堡',
+    'HAM': '🇩🇪 汉堡',
+    'DUS': '🇩🇪 杜塞尔多夫',
+    'CGN': '🇩🇪 科隆',
+    'STR': '🇩🇪 斯图加特',
+    'AMS': '🇳🇱 阿姆斯特丹',
+    'BRU': '🇧🇪 布鲁塞尔',
+    'LUX': '🇱🇺 卢森堡',
+    'ZRH': '🇨🇭 苏黎世',
+    'GVA': '🇨🇭 日内瓦',
+    'BSL': '🇨🇭 巴塞尔',
+    'VIE': '🇦🇹 维也纳',
+    'PRG': '🇨🇿 布拉格',
+    'BUD': '🇭🇺 布达佩斯',
+    'WAW': '🇵🇱 华沙',
+    'KRK': '🇵🇱 克拉科夫',
+    'MXP': '🇮🇹 米兰马尔彭萨',
+    'LIN': '🇮🇹 米兰利纳特',
+    'FCO': '🇮🇹 罗马',
+    'VCE': '🇮🇹 威尼斯',
+    'NAP': '🇮🇹 那不勒斯',
+    'FLR': '🇮🇹 佛罗伦萨',
+    'BGY': '🇮🇹 贝加莫',
+    'MAD': '🇪🇸 马德里',
+    'BCN': '🇪🇸 巴塞罗那',
+    'PMI': '🇪🇸 帕尔马',
+    'AGP': '🇪🇸 马拉加',
+    'VLC': '🇪🇸 瓦伦西亚',
+    'SVQ': '🇪🇸 塞维利亚',
+    'BIO': '🇪🇸 毕尔巴鄂',
+    'LIS': '🇵🇹 里斯本',
+    'OPO': '🇵🇹 波尔图',
+    'FAO': '🇵🇹 法鲁',
+    'DUB': '🇮🇪 都柏林',
+    'CPH': '🇩🇰 哥本哈根',
+    'ARN': '🇸🇪 斯德哥尔摩',
+    'GOT': '🇸🇪 哥德堡',
+    'OSL': '🇳🇴 奥斯陆',
+    'BGO': '🇳🇴 卑尔根',
+    'HEL': '🇫🇮 赫尔辛基',
+    'RIX': '🇱🇻 里加',
+    'TLL': '🇪🇪 塔林',
+    'VNO': '🇱🇹 维尔纽斯',
+    'ATH': '🇬🇷 雅典',
+    'SKG': '🇬🇷 塞萨洛尼基',
+    'SOF': '🇧🇬 索非亚',
+    'OTP': '🇷🇴 布加勒斯特',
+    'BEG': '🇷🇸 贝尔格莱德',
+    'ZAG': '🇭🇷 萨格勒布',
+    'LJU': '🇸🇮 卢布尔雅那',
+    'KBP': '🇺🇦 基辅',
+    'IEV': '🇺🇦 基辅茹良尼',
+    'ODS': '🇺🇦 敖德萨',
+    'SVO': '🇷🇺 莫斯科谢列梅捷沃',
+    'DME': '🇷🇺 莫斯科多莫杰多沃',
+    'VKO': '🇷🇺 莫斯科伏努科沃',
+    'LED': '🇷🇺 圣彼得堡',
+    'IST': '🇹🇷 伊斯坦布尔',
+    'SAW': '🇹🇷 伊斯坦布尔萨比哈',
+    'ESB': '🇹🇷 安卡拉',
+    'AYT': '🇹🇷 安塔利亚',
+    'ADB': '🇹🇷 伊兹密尔',
+    'TLV': '🇮🇱 特拉维夫',
+    'AMM': '🇯🇴 安曼',
+    'BEY': '🇱🇧 贝鲁特',
+    'BAH': '🇧🇭 巴林',
+    'KWI': '🇰🇼 科威特',
+    'DXB': '🇦🇪 迪拜',
+    'AUH': '🇦🇪 阿布扎比',
+    'SHJ': '🇦🇪 沙迦',
+    'DOH': '🇶🇦 多哈',
+    'MCT': '🇴🇲 马斯喀特',
+    'RUH': '🇸🇦 利雅得',
+    'JED': '🇸🇦 吉达',
+    'DMM': '🇸🇦 达曼',
+    'CAI': '🇪🇬 开罗',
+    'HBE': '🇪🇬 亚历山大',
+    'SSH': '🇪🇬 沙姆沙伊赫',
+    'CMN': '🇲🇦 卡萨布兰卡',
+    'RAK': '🇲🇦 马拉喀什',
+    'TUN': '🇹🇳 突尼斯',
+    'ALG': '🇩🇿 阿尔及尔',
+    'LOS': '🇳🇬 拉各斯',
+    'ABV': '🇳🇬 阿布贾',
+    'ACC': '🇬🇭 阿克拉',
+    'NBO': '🇰🇪 内罗毕',
+    'MBA': '🇰🇪 蒙巴萨',
+    'ADD': '🇪🇹 亚的斯亚贝巴',
+    'DAR': '🇹🇿 达累斯萨拉姆',
+    'JNB': '🇿🇦 约翰内斯堡',
+    'CPT': '🇿🇦 开普敦',
+    'DUR': '🇿🇦 德班',
+    'HRE': '🇿🇼 哈拉雷',
+    'LUN': '🇿🇲 卢萨卡',
+    'MRU': '🇲🇺 毛里求斯',
+    'SEZ': '🇸🇨 塞舌尔',
+    'SYD': '🇦🇺 悉尼',
+    'MEL': '🇦🇺 墨尔本',
+    'BNE': '🇦🇺 布里斯班',
+    'PER': '🇦🇺 珀斯',
+    'ADL': '🇦🇺 阿德莱德',
+    'CBR': '🇦🇺 堪培拉',
+    'OOL': '🇦🇺 黄金海岸',
+    'CNS': '🇦🇺 凯恩斯',
+    'AKL': '🇳🇿 奥克兰',
+    'WLG': '🇳🇿 惠灵顿',
+    'CHC': '🇳🇿 基督城',
+    'ZQN': '🇳🇿 皇后镇',
+    'NAN': '🇫🇯 楠迪',
+    'PPT': '🇵🇫 帕皮提',
+    'GUM': '🇬🇺 关岛',
+    'GRU': '🇧🇷 圣保罗瓜鲁柳斯',
+    'CGH': '🇧🇷 圣保罗孔戈尼亚斯',
+    'GIG': '🇧🇷 里约热内卢',
+    'BSB': '🇧🇷 巴西利亚',
+    'CNF': '🇧🇷 贝洛奥里藏特',
+    'POA': '🇧🇷 阿雷格里港',
+    'CWB': '🇧🇷 库里蒂巴',
+    'FOR': '🇧🇷 福塔莱萨',
+    'REC': '🇧🇷 累西腓',
+    'SSA': '🇧🇷 萨尔瓦多',
+    'EZE': '🇦🇷 布宜诺斯艾利斯',
+    'AEP': '🇦🇷 布宜诺斯艾利斯城',
+    'COR': '🇦🇷 科尔多瓦',
+    'MDZ': '🇦🇷 门多萨',
+    'SCL': '🇨🇱 圣地亚哥',
+    'LIM': '🇵🇪 利马',
+    'BOG': '🇨🇴 波哥大',
+    'MDE': '🇨🇴 麦德林',
+    'CLO': '🇨🇴 卡利',
+    'UIO': '🇪🇨 基多',
+    'GYE': '🇪🇨 瓜亚基尔',
+    'CCS': '🇻🇪 加拉加斯',
+    'MVD': '🇺🇾 蒙得维的亚',
+    'ASU': '🇵🇾 亚松森',
+    'PTY': '🇵🇦 巴拿马城',
+    'SJO': '🇨🇷 圣何塞',
+    'GUA': '🇬🇹 危地马拉城',
+    'SAL': '🇸🇻 圣萨尔瓦多',
+    'TGU': '🇭🇳 特古西加尔巴',
+    'MGA': '🇳🇮 马那瓜',
+    'BZE': '🇧🇿 伯利兹城',
+    'MEX': '🇲🇽 墨西哥城',
+    'GDL': '🇲🇽 瓜达拉哈拉',
+    'MTY': '🇲🇽 蒙特雷',
+    'CUN': '🇲🇽 坎昆',
+    'TIJ': '🇲🇽 蒂华纳',
+    'SJD': '🇲🇽 圣何塞德尔卡沃',
+    'YYZ': '🇨🇦 多伦多',
+    'YVR': '🇨🇦 温哥华',
+    'YUL': '🇨🇦 蒙特利尔',
+    'YYC': '🇨🇦 卡尔加里',
+    'YEG': '🇨🇦 埃德蒙顿',
+    'YOW': '🇨🇦 渥太华',
+    'YWG': '🇨🇦 温尼伯',
+    'YHZ': '🇨🇦 哈利法克斯',
+    'HAV': '🇨🇺 哈瓦那',
+    'SJU': '🇵🇷 圣胡安',
+    'SDQ': '🇩🇴 圣多明各',
+    'PAP': '🇭🇹 太子港',
+    'KIN': '🇯🇲 金斯顿',
+    'NAS': '🇧🇸 拿骚',
+    'MBJ': '🇯🇲 蒙特哥贝'
+  };
+  function 获取机房名称(机房20018) {
+    return 机房映射[机房20018] || 机房20018;
+  }
+
+  // 城市筛选相关函数
+  const 城市筛选值 = document.getElementById('cityFilterContainer');
+  const 城市值值 = document.getElementById('cityCheckboxesContainer');
+  function 更新城市筛选() {
+    if (!城市筛选值 || !城市值值) return;
+
+    // 从测试结果中提取所有可用的城市
+    const 城市映射 = new Map();
+    测试结果列表.forEach((结果20017, 索引20016) => {
+      if (结果20017.success && 结果20017.colo) {
+        const 机房20015 = 结果20017.colo;
+        if (!城市映射.has(机房20015)) {
+          城市映射.set(机房20015, {
+            colo: 机房20015,
+            name: 获取机房名称(机房20015),
+            count: 0
+          });
+        }
+        城市映射.get(机房20015).count++;
+      }
+    });
+    if (城市映射.size === 0) {
+      城市筛选值.style.display = 'none';
+      return;
+    }
+    城市筛选值.style.display = 'block';
+    城市值值.innerHTML = '';
+
+    // 按城市名称排序
+    const 城市列表 = Array.from(城市映射.values()).sort((甲值20014, 乙值20013) => 甲值20014.name.localeCompare(乙值20013.name));
+    城市列表.forEach(城市 => {
+      const 标签 = document.createElement('label');
+      标签.style.cssText = 'display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff; font-size: 0.85rem; padding: 4px 8px; background: rgba(20, 5, 50, 0.4); border: 1px solid #7aa9c4; border-radius: 4px;';
+      const 复选框20012 = document.createElement('input');
+      复选框20012.type = 'checkbox';
+      复选框20012.value = 城市.colo;
+      复选框20012.checked = true;
+      复选框20012.dataset.colo = 城市.colo;
+      复选框20012.style.cssText = 'margin-right: 6px; width: 16px; height: 16px; cursor: pointer;';
+      const 本地值20011 = document.createElement('span');
+      本地值20011.textContent = 城市.name + ' (' + 城市.count + ')';
+      标签.appendChild(复选框20012);
+      标签.appendChild(本地值20011);
+      城市值值.appendChild(标签);
+      复选框20012.addEventListener('change', 按城市筛选结果);
+    });
+
+    // 监听筛选模式变化
+    const 筛选值值 = document.querySelectorAll('input[name="cityFilterMode"]');
+    筛选值值.forEach(单选框 => {
+      单选框.addEventListener('change', function () {
+        if (this.value === 'all') {
+          // 切换到"全部城市"模式时，自动选中所有城市复选框
+          const 城市值20010 = 城市值值.querySelectorAll('input[type="checkbox"]');
+          城市值20010.forEach(本地值20009 => {
+            本地值20009.checked = true;
+            本地值20009.disabled = false;
+          });
+        }
+        按城市筛选结果();
+      });
+    });
+  }
+  function 按城市筛选结果() {
+    if (!结果列表列表 || !城市值值) return;
+    const 筛选值 = document.querySelector('input[name="cityFilterMode"]:checked')?.value || 'all';
+    const 结果项目列表 = 结果列表列表.querySelectorAll('[data-index]');
+    const 城市值 = 城市值值.querySelectorAll('input[type="checkbox"]');
+    if (筛选值 === 'fastest10') {
+      // 只选择最快的10个
+      const 值结果列表 = 测试结果列表.map((结果, 索引20008) => ({
+        result: 结果,
+        index: 索引20008
+      })).filter(项目20007 => 项目20007.result.success).sort((甲值, 乙值) => 甲值.result.latency - 乙值.result.latency).slice(0, 10);
+      const 最快索引集合 = new Set(值结果列表.map(项目20006 => 项目20006.index));
+      结果项目列表.forEach(项目20005 => {
+        const 索引 = parseInt(项目20005.dataset.index);
+        const 复选框20004 = 项目20005.querySelector('input[type="checkbox"]');
+        if (最快索引集合.has(索引)) {
+          项目20005.style.display = 'flex';
+          if (复选框20004) 复选框20004.checked = true;
+        } else {
+          项目20005.style.display = 'none';
+          if (复选框20004) 复选框20004.checked = false;
+        }
+      });
+
+      // 禁用城市复选框
+      城市值.forEach(本地值20003 => 本地值20003.disabled = true);
+    } else {
+      // 根据选中的城市筛选
+      const 已选城市列表 = new Set();
+      城市值.forEach(本地值20002 => {
+        if (本地值20002.checked) {
+          已选城市列表.add(本地值20002.value);
+        }
+      });
+
+      // 如果所有城市都被选中（或没有选中任何城市），显示所有结果
+      const 值值20001 = 城市值.length > 0 && 已选城市列表.size === 城市值.length;
+      const 值值 = 已选城市列表.size === 0;
+      结果项目列表.forEach(项目 => {
+        const 机房20000 = 项目.dataset.colo || '';
+        const 复选框 = 项目.querySelector('input[type="checkbox"]');
+        if (值值20001 || 值值 || 已选城市列表.has(机房20000)) {
+          项目.style.display = 'flex';
+          // 同步更新结果项复选框的选中状态
+          if (复选框) {
+            if (值值20001) {
+              // 所有城市都选中时，所有结果项复选框都选中
+              复选框.checked = true;
+            } else if (值值) {
+              // 没有选中任何城市时，所有结果项复选框都取消选中
+              复选框.checked = false;
+            } else {
+              // 根据城市选择状态同步复选框
+              复选框.checked = 已选城市列表.has(机房20000);
+            }
+          }
+        } else {
+          项目.style.display = 'none';
+          // 取消选中隐藏的结果项复选框
+          if (复选框) {
+            复选框.checked = false;
+          }
+        }
+      });
+
+      // 启用城市复选框
+      城市值.forEach(本地值 => 本地值.disabled = false);
+    }
+  }
+  async function 测试延迟(主机, 端口, 信号) {
+    const 超时 = 8000;
+    let 机房 = '';
+    let 测试网址 = '';
+    try {
+      const 控制器 = new AbortController();
+      const 超时标识 = setTimeout(() => 控制器.abort(), 超时);
+      if (信号) {
+        信号.addEventListener('abort', () => 控制器.abort());
+      }
+      const 清理主机 = 主机.replace(/^\\[|\\]$/g, '');
+      const 十六进制地址 = 地址转十六进制(清理主机);
+      const 测试域名 = 十六进制地址 ? 十六进制地址 + '.nip.lfree.org' : 清理主机 + '.nip.lfree.org';
+      测试网址 = 'https://' + 测试域名 + ':' + 端口 + '/';
+      console.log('[LatencyTest] Testing:', 测试网址, 'Original:', 主机 + ':' + 端口, 'HexIP:', 十六进制地址);
+      const 首次开始 = Date.now();
+      const 响应1 = await fetch(测试网址, {
+        signal: 控制器.signal
+      });
+      const 首次值 = Date.now() - 首次开始;
+      if (!响应1.ok) {
+        clearTimeout(超时标识);
+        return {
+          success: false,
+          latency: 首次值,
+          error: 'HTTP ' + 响应1.status + ' ' + 响应1.statusText,
+          colo: '',
+          testUrl: 测试网址
+        };
+      }
+      try {
+        const 文本 = await 响应1.text();
+        console.log('[LatencyTest] Response body:', 文本.substring(0, 200));
+        const 数据 = JSON.parse(文本);
+        if (数据.colo) {
+          机房 = 数据.colo;
+        }
+      } catch (事件值) {
+        console.log('[LatencyTest] Parse error:', 事件值.message);
+      }
+      const 值开始 = Date.now();
+      const 响应2 = await fetch(测试网址, {
+        signal: 控制器.signal
+      });
+      await 响应2.text();
+      const 延迟 = Date.now() - 值开始;
+      clearTimeout(超时标识);
+      console.log('[LatencyTest] First:', 首次值 + 'ms (DNS+TLS+RTT)', 'Second:', 延迟 + 'ms (RTT only)');
+      return {
+        success: true,
+        latency: 延迟,
+        colo: 机房,
+        testUrl: 测试网址
+      };
+    } catch (错误) {
+      const 错误消息 = 错误.name === 'AbortError' ? '${是否值236 ? 'زمان تمام شد' : '超时'}' : 错误.message;
+      console.log('[LatencyTest] Error:', 错误消息, 'URL:', 测试网址);
+      return {
+        success: false,
+        latency: -1,
+        error: 错误消息,
+        colo: '',
+        testUrl: 测试网址
+      };
+    }
+  }
+});
+</script>
+    </body>
+    </html>`;
+  return new Response(值页面, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8'
+    }
+  });
+}
+async function 解析木马头部(缓冲234, 本地值233) {
+  const 字节 = 处理值值8数组(缓冲234);
+  const 密码值井号 = 传输路径 || 本地值233;
+  const 值224密码 = await 处理值224井号(密码值井号);
+  if (字节.byteLength < 56) {
+    return {
+      hasError: true,
+      message: "invalid " + atob('dHJvamFu') + " data - too short"
+    };
+  }
+  let 值值索引 = 56;
+  if (字节[56] !== 0x0d || 字节[57] !== 0x0a) {
+    return {
+      hasError: true,
+      message: "invalid " + atob('dHJvamFu') + " header format (missing CR LF)"
+    };
+  }
+  const 密码232 = 共享解码器.decode(字节.subarray(0, 值值索引));
+  if (密码232 !== 值224密码) {
+    return {
+      hasError: true,
+      message: "invalid " + atob('dHJvamFu') + " password"
+    };
+  }
+  const 代理5数据缓冲 = 字节.subarray(值值索引 + 2);
+  if (代理5数据缓冲.byteLength < 6) {
+    return {
+      hasError: true,
+      message: atob('aW52YWxpZCBTT0NLUzUgcmVxdWVzdCBkYXRh')
+    };
+  }
+  const 视图231 = new DataView(代理5数据缓冲.buffer, 代理5数据缓冲.byteOffset, 代理5数据缓冲.byteLength);
+  const 命令230 = 视图231.getUint8(0);
+  if (命令230 !== 1) {
+    return {
+      hasError: true,
+      message: "unsupported command, only TCP (CONNECT) is allowed"
+    };
+  }
+  const 本地值229 = 视图231.getUint8(1);
+  let 地址长度 = 0;
+  let 地址索引228 = 2;
+  let 地址227 = "";
+  switch (本地值229) {
+    case 1:
+      地址长度 = 4;
+      地址227 = 代理5数据缓冲.subarray(地址索引228, 地址索引228 + 地址长度).join(".");
+      break;
+    case 3:
+      地址长度 = 代理5数据缓冲[地址索引228];
+      地址索引228 += 1;
+      地址227 = 共享解码器.decode(代理5数据缓冲.subarray(地址索引228, 地址索引228 + 地址长度));
+      break;
+    case 4:
+      地址长度 = 16;
+      const 数据视图 = new DataView(代理5数据缓冲.buffer, 代理5数据缓冲.byteOffset + 地址索引228, 地址长度);
+      const 值6 = [];
+      for (let 索引值226 = 0; 索引值226 < 8; 索引值226++) {
+        值6.push(数据视图.getUint16(索引值226 * 2).toString(16));
+      }
+      地址227 = 值6.join(":");
+      break;
+    default:
+      return {
+        hasError: true,
+        message: `invalid addressType is ${本地值229}`
+      };
+  }
+  if (!地址227) {
+    return {
+      hasError: true,
+      message: `address is empty, addressType is ${本地值229}`
+    };
+  }
+  const 端口索引225 = 地址索引228 + 地址长度;
+  const 端口远程 = new DataView(代理5数据缓冲.buffer, 代理5数据缓冲.byteOffset + 端口索引225, 2).getUint16(0);
+  return {
+    hasError: false,
+    addressRemote: 地址227,
+    addressType: 本地值229,
+    port: 端口远程,
+    hostname: 地址227,
+    rawClientData: 代理5数据缓冲.subarray(端口索引225 + 4)
+  };
+}
+async function 处理值224井号(文本224) {
+  const 编码器 = new TextEncoder();
+  const 数据223 = 编码器.encode(文本224);
+  const 本地值222 = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];
+  let 头部游标 = [0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4];
+  const 消息长度 = 数据223.length;
+  const 值长度221 = 消息长度 * 8;
+  const 值长度220 = Math.ceil((消息长度 + 9) / 64) * 64;
+  const 本地值219 = new Uint8Array(值长度220);
+  本地值219.set(数据223);
+  本地值219[消息长度] = 0x80;
+  const 视图 = new DataView(本地值219.buffer);
+  视图.setUint32(值长度220 - 4, 值长度221, false);
+  for (let 块218 = 0; 块218 < 值长度220; 块218 += 64) {
+    const 写入器包装 = new Uint32Array(64);
+    for (let 索引值217 = 0; 索引值217 < 16; 索引值217++) {
+      写入器包装[索引值217] = 视图.getUint32(块218 + 索引值217 * 4, false);
+    }
+    for (let 索引值216 = 16; 索引值216 < 64; 索引值216++) {
+      const 值0215 = 处理值值200(写入器包装[索引值216 - 15], 7) ^ 处理值值200(写入器包装[索引值216 - 15], 18) ^ 写入器包装[索引值216 - 15] >>> 3;
+      const 值1214 = 处理值值200(写入器包装[索引值216 - 2], 17) ^ 处理值值200(写入器包装[索引值216 - 2], 19) ^ 写入器包装[索引值216 - 2] >>> 10;
+      写入器包装[索引值216] = 写入器包装[索引值216 - 16] + 值0215 + 写入器包装[索引值216 - 7] + 值1214 >>> 0;
+    }
+    let [甲值213, 乙值, 丙值212, 丁值211, 事件值210, 表单值, 本地值209, 头值208] = 头部游标;
+    for (let 索引值207 = 0; 索引值207 < 64; 索引值207++) {
+      const 值1206 = 处理值值200(事件值210, 6) ^ 处理值值200(事件值210, 11) ^ 处理值值200(事件值210, 25);
+      const 本地值205 = 事件值210 & 表单值 ^ ~事件值210 & 本地值209;
+      const 值1 = 头值208 + 值1206 + 本地值205 + 本地值222[索引值207] + 写入器包装[索引值207] >>> 0;
+      const 值0 = 处理值值200(甲值213, 2) ^ 处理值值200(甲值213, 13) ^ 处理值值200(甲值213, 22);
+      const 本地值204 = 甲值213 & 乙值 ^ 甲值213 & 丙值212 ^ 乙值 & 丙值212;
+      const 值2203 = 值0 + 本地值204 >>> 0;
+      头值208 = 本地值209;
+      本地值209 = 表单值;
+      表单值 = 事件值210;
+      事件值210 = 丁值211 + 值1 >>> 0;
+      丁值211 = 丙值212;
+      丙值212 = 乙值;
+      乙值 = 甲值213;
+      甲值213 = 值1 + 值2203 >>> 0;
+    }
+    头部游标[0] = 头部游标[0] + 甲值213 >>> 0;
+    头部游标[1] = 头部游标[1] + 乙值 >>> 0;
+    头部游标[2] = 头部游标[2] + 丙值212 >>> 0;
+    头部游标[3] = 头部游标[3] + 丁值211 >>> 0;
+    头部游标[4] = 头部游标[4] + 事件值210 >>> 0;
+    头部游标[5] = 头部游标[5] + 表单值 >>> 0;
+    头部游标[6] = 头部游标[6] + 本地值209 >>> 0;
+    头部游标[7] = 头部游标[7] + 头值208 >>> 0;
+  }
+  const 结果202 = [];
+  for (let 索引值201 = 0; 索引值201 < 7; 索引值201++) {
+    结果202.push((头部游标[索引值201] >>> 24 & 0xff).toString(16).padStart(2, '0'), (头部游标[索引值201] >>> 16 & 0xff).toString(16).padStart(2, '0'), (头部游标[索引值201] >>> 8 & 0xff).toString(16).padStart(2, '0'), (头部游标[索引值201] & 0xff).toString(16).padStart(2, '0'));
+  }
+  return 结果202.join('');
+}
+function 处理值值200(值199, 本地值198) {
+  return 值199 >>> 本地值198 | 值199 << 32 - 本地值198;
+}
+let 值值197 = 0;
+const 值超文本缓冲大小 = 128 * 1024;
+const 连接超时值 = 5000;
+const 值超时值 = 45000;
+const 上限值196 = 2;
+const 上限值 = 32;
+const 叉HTTP霍夫曼码长 = [
+13, 23, 28, 28, 28, 28, 28, 28, 28, 24, 30, 28, 28, 30, 28, 28,
+	28, 28, 28, 28, 28, 28, 30, 28, 28, 28, 28, 28, 28, 28, 28, 28,
+	6, 10, 10, 12, 13, 6, 8, 11, 10, 10, 8, 11, 8, 6, 6, 6,
+	5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 7, 8, 15, 6, 12, 10,
+	13, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 8, 7, 8, 13, 19, 13, 14, 6,
+	15, 5, 6, 5, 6, 5, 6, 6, 6, 5, 7, 7, 6, 6, 6, 5,
+	6, 7, 6, 5, 5, 6, 7, 7, 7, 7, 7, 15, 11, 14, 13, 28,
+	20, 22, 20, 20, 22, 22, 22, 23, 22, 23, 23, 23, 23, 23, 24, 23,
+	24, 24, 22, 23, 24, 23, 23, 23, 23, 21, 22, 23, 22, 23, 23, 24,
+	22, 21, 20, 22, 22, 23, 23, 21, 23, 22, 22, 24, 21, 22, 23, 23,
+	21, 21, 22, 21, 23, 22, 23, 23, 20, 22, 22, 22, 23, 22, 22, 23,
+	26, 26, 20, 19, 22, 23, 22, 25, 26, 26, 26, 27, 27, 26, 24, 25,
+	19, 21, 26, 27, 27, 26, 27, 24, 21, 21, 26, 26, 28, 27, 27, 27,
+	20, 24, 20, 21, 22, 21, 21, 23, 22, 22, 25, 25, 24, 24, 26, 23,
+	26, 27, 26, 26, 27, 27, 27, 27, 27, 28, 27, 27, 27, 27, 27, 26,
+	30
+];
+// xhttp 抗指纹填充：从 UUID 派生隐蔽的头名/键名，与订阅侧 extra 约定一致
+function 获取叉HTTP填充标识(标识串) {
+  return { 头: 标识串.slice(1, 7), 键: '_' + 标识串.slice(25, 31) };
+}
+function 计算叉HTTP霍夫曼字节长度(字符串) {
+  const 字节 = new TextEncoder().encode(字符串);
+  let 总位数 = 0;
+  for (let 索引 = 0; 索引 < 字节.length; 索引++) 总位数 += 叉HTTP霍夫曼码长[字节[索引]];
+  return Math.ceil(总位数 / 8);
+}
+function 提取叉HTTP填充值(请求, 填充头, 填充键) {
+  const 头值 = 请求.headers.get(填充头);
+  if (头值) {
+    try {
+      const 解析 = new URL(头值, 'https://x.invalid');
+      const 查询值 = 解析.searchParams.get(填充键);
+      if (查询值) return 查询值;
+    } catch (忽略) {}
+    return 头值;
+  }
+  try {
+    return new URL(请求.url).searchParams.get(填充键) || '';
+  } catch (忽略) {
+    return '';
+  }
+}
+function 校验叉HTTP填充(请求, 填充头, 填充键) {
+  const 填充 = 提取叉HTTP填充值(请求, 填充头, 填充键);
+  if (!填充) return true;
+  const 长度 = 计算叉HTTP霍夫曼字节长度(填充);
+  return 长度 >= 98 && 长度 <= 1002;
+}
+const 叉HTTP填充字符集 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+function 生成叉HTTP填充串(长度) {
+  const 字符集长度 = 叉HTTP填充字符集.length;
+  let 结果 = '';
+  for (let 索引 = 0; 索引 < 长度; 索引++) 结果 += 叉HTTP填充字符集[Math.floor(Math.random() * 字符集长度)];
+  return 结果;
+}
+function 处理扩展超文本值195(本地值194) {
+  return new Promise(结果值193 => setTimeout(结果值193, 本地值194));
+}
+function 验证唯一标识扩展超文本(标识192, 唯一标识191) {
+  for (let 索引190 = 0; 索引190 < 16; 索引190++) {
+    if (标识192[索引190] !== 唯一标识191[索引190]) {
+      return false;
+    }
+  }
+  return true;
+}
+class 扩展超文本计数器 {
+  #total;
+  constructor() {
+    this.#total = 0;
+  }
+  get() {
+    return this.#total;
+  }
+  add(大小189) {
+    this.#total += 大小189;
+  }
+}
+function 处理值值值(首次, ...本地值188) {
+  let 长度 = 首次.length;
+  for (let 甲值187 of 本地值188) {
+    长度 += 甲值187.length;
+  }
+  const 结果值186 = new 首次.constructor(长度);
+  结果值186.set(首次, 0);
+  长度 = 首次.length;
+  for (let 甲值185 of 本地值188) {
+    结果值186.set(甲值185, 长度);
+    长度 += 甲值185.length;
+  }
+  return 结果值186;
+}
+function 解析唯一标识扩展超文本(唯一标识184) {
+  唯一标识184 = 唯一标识184.replaceAll('-', '');
+  const 结果值183 = [];
+  for (let 索引182 = 0; 索引182 < 16; 索引182++) {
+    const 取值181 = parseInt(唯一标识184.substr(索引182 * 2, 2), 16);
+    结果值183.push(取值181);
+  }
+  return 结果值183;
+}
+function 获取扩展超文本缓冲(大小) {
+  return new Uint8Array(new ArrayBuffer(大小 || 值超文本缓冲大小));
+}
+async function 读取扩展超文本头部(本地值180, 唯一标识字符串) {
+  const 读取器179 = 本地值180.getReader({
+    mode: 'byob'
+  });
+  try {
+    let 结果值178 = await 读取器179.readAtLeast(1 + 16 + 1, 获取扩展超文本缓冲());
+    let 本地值177 = 0;
+    let 索引 = 0;
+    let 缓存 = 结果值178.value;
+    本地值177 += 结果值178.value.length;
+    const 本地值176 = 缓存[0];
+    const 标识175 = 缓存.slice(1, 1 + 16);
+    const 唯一标识174 = 解析唯一标识扩展超文本(唯一标识字符串);
+    if (!验证唯一标识扩展超文本(标识175, 唯一标识174)) {
+      return `invalid UUID`;
+    }
+    const 值长度173 = 缓存[1 + 16];
+    const 地址值1 = 1 + 16 + 1 + 值长度173 + 1 + 2 + 1;
+    if (地址值1 + 1 > 本地值177) {
+      if (结果值178.done) {
+        return `header too short`;
+      }
+      索引 = 地址值1 + 1 - 本地值177;
+      结果值178 = await 读取器179.readAtLeast(索引, 获取扩展超文本缓冲());
+      本地值177 += 结果值178.value.length;
+      缓存 = 处理值值值(缓存, 结果值178.value);
+    }
+    const 命令 = 缓存[1 + 16 + 1 + 值长度173];
+    if (命令 !== 1) {
+      return `unsupported command: ${命令}`;
+    }
+    const 端口172 = (缓存[地址值1 - 1 - 2] << 8) + 缓存[地址值1 - 1 - 1];
+    const 本地值171 = 缓存[地址值1 - 1];
+    let 头部长度 = -1;
+    if (本地值171 === 地址类型_四版) {
+      头部长度 = 地址值1 + 4;
+    } else if (本地值171 === 地址类型_六版) {
+      头部长度 = 地址值1 + 16;
+    } else if (本地值171 === 地址类型_网址) {
+      头部长度 = 地址值1 + 1 + 缓存[地址值1];
+    }
+    if (头部长度 < 0) {
+      return 'read address type failed';
+    }
+    索引 = 头部长度 - 本地值177;
+    if (索引 > 0) {
+      if (结果值178.done) {
+        return `read address failed`;
+      }
+      结果值178 = await 读取器179.readAtLeast(索引, 获取扩展超文本缓冲());
+      本地值177 += 结果值178.value.length;
+      缓存 = 处理值值值(缓存, 结果值178.value);
+    }
+    let 主机名170 = '';
+    索引 = 地址值1;
+    switch (本地值171) {
+      case 地址类型_四版:
+        主机名170 = 缓存.slice(索引, 索引 + 4).join('.');
+        break;
+      case 地址类型_网址:
+        主机名170 = new TextDecoder().decode(缓存.slice(索引 + 1, 索引 + 1 + 缓存[索引]));
+        break;
+      case 地址类型_六版:
+        主机名170 = 缓存.slice(索引, 索引 + 16).reduce((字符串值, 值2169, 值2, 甲值) => 值2 % 2 ? 字符串值.concat(((甲值[值2 - 1] << 8) + 值2169).toString(16)) : 字符串值, []).join(':');
+        break;
+    }
+    if (主机名170.length < 1) {
+      return 'failed to parse hostname';
+    }
+    const 数据 = 缓存.slice(头部长度);
+    return {
+      hostname: 主机名170,
+      port: 端口172,
+      data: 数据,
+      resp: new Uint8Array([本地值176, 0]),
+      reader: 读取器179,
+      done: 结果值178.done
+    };
+  } catch (错误168) {
+    try {
+      读取器179.releaseLock();
+    } catch (忽略值167) {}
+    throw 错误168;
+  }
+}
+async function 处理值值远程扩展超文本(计数器166, 写入器165, 本地值164) {
+  async function 处理值值(丁值) {
+    if (!丁值 || 丁值.length === 0) {
+      return;
+    }
+    计数器166.add(丁值.length);
+    try {
+      await 写入器165.write(丁值);
+    } catch (错误163) {
+      throw 错误163;
+    }
+  }
+  try {
+    await 处理值值(本地值164.data);
+    let 块数量162 = 0;
+    while (!本地值164.done) {
+      const 结果值161 = await 本地值164.reader.read(获取扩展超文本缓冲());
+      if (结果值161.done) break;
+      await 处理值值(结果值161.value);
+      本地值164.done = 结果值161.done;
+      块数量162++;
+      if (块数量162 % 10 === 0) {
+        await 处理扩展超文本值195(0);
+      }
+      if (!结果值161.value || 结果值161.value.length === 0) {
+        await 处理扩展超文本值195(2);
+      }
+    }
+  } catch (错误160) {
+    throw 错误160;
+  }
+}
+function 创建扩展超文本值159(本地值158, 本地值157) {
+  const 计数器156 = new 扩展超文本计数器();
+  const 写入器155 = 本地值157.getWriter();
+  const 本地值154 = (async () => {
+    try {
+      await 处理值值远程扩展超文本(计数器156, 写入器155, 本地值158);
+    } catch (错误153) {
+      throw 错误153;
+    } finally {
+      try {
+        await 写入器155.close();
+      } catch (错误152) {}
+    }
+  })();
+  return {
+    counter: 计数器156,
+    done: 本地值154,
+    abort: () => {
+      try {
+        写入器155.abort();
+      } catch (忽略值151) {}
+    }
+  };
+}
+function 创建扩展超文本值(本地值150, 远程值) {
+  const 计数器 = new 扩展超文本计数器();
+  let 流;
+  const 本地值149 = new Promise((本地值148, 本地值147) => {
+    流 = new TransformStream({
+      start(控制器146) {
+        计数器.add(本地值150.length);
+        控制器146.enqueue(本地值150);
+      },
+      transform(块, 控制器145) {
+        计数器.add(块.length);
+        控制器145.enqueue(块);
+      },
+      cancel(本地值144) {
+        本地值147(`download cancelled: ${本地值144}`);
+      }
+    }, null, new ByteLengthQueuingStrategy({
+      highWaterMark: 值超文本缓冲大小
+    }));
+    let 值值143 = Date.now();
+    const 值计时器 = setInterval(() => {
+      if (Date.now() - 值值143 > 值超时值) {
+        try {
+          流.writable.abort?.('idle timeout');
+        } catch (忽略值142) {}
+        clearInterval(值计时器);
+        本地值147('idle timeout');
+      }
+    }, 5000);
+    const 读取器 = 远程值.getReader();
+    const 写入器 = 流.writable.getWriter();
+    ;
+    (async () => {
+      try {
+        let 块数量 = 0;
+        while (true) {
+        
